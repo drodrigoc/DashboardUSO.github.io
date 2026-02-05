@@ -1,0 +1,1344 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard DI</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+  <style>
+    /* Animación simple (porque Tailwind CDN no trae keyframes custom por defecto) */
+    .fade-in-up { animation: fadeInUp .35s ease-out both; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    /* Opcional: ocultar scrollbar (estético) */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+
+<body class="bg-slate-50">
+  <div class="flex h-screen font-sans overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 shadow-lg">
+      <div class="p-8 flex items-center">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center mr-3 flex-shrink-0 shadow-blue-200 shadow-lg">
+          <span class="text-white font-bold text-lg">DI</span>
+        </div>
+        <span class="text-sm font-bold text-slate-800 tracking-tight leading-tight">
+          Dirección de Investigación<br/>
+        </span>
+      </div>
+
+      <div class="flex-1 overflow-y-auto py-4">
+        
+
+        <!-- Sidebar buttons (data-tab = id) -->
+        <nav id="sidebarNav">
+          <button data-tab="Overview" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Visión General</span>
+          </button>
+
+          <button data-tab="InvestigacionInstitucional" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="graduation-cap" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Investigación Institucional</span>
+          </button>
+
+          <button data-tab="Presupuesto" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="activity" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Ejecución Financiera</span>
+          </button>
+
+          <button data-tab="SeguimientoEditorial" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="users" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Revista Integración</span>
+          </button>
+
+          <button data-tab="ConveniosRegistro" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="globe" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Convenios</span>
+          </button>
+
+          <button data-tab="ModulosCITAM_CIDI" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="trophy" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">CITAM / CIDI</span>
+          </button>
+
+          <button data-tab="Acreditacion" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="shield-check" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Acreditación</span>
+          </button>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+
+      <!-- Top Header -->
+<header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 z-10 sticky top-0">
+  
+  <div class="flex items-center">
+    <div class="flex items-center md:hidden">
+      <i data-lucide="menu" class="text-slate-500 w-6 h-6 mr-4"></i>
+      <span class="font-bold text-slate-800 text-sm">Unidad de Vinculación</span>
+    </div>
+    </div>
+
+  <div class="flex items-center h-full">
+    <a href="landing.html" class="block">
+      <div class="flex items-center h-16 px-2"> 
+        <img 
+          src="logousocompleto.png" 
+          alt="Logo" 
+          class="h-12 w-auto object-contain"
+        >
+      </div>
+    </a>
+  </div>
+
+</header>
+
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto p-8 scrollbar-hide">
+        <div class="max-w-7xl mx-auto">
+
+          <!-- Section Header -->
+          <div class="flex justify-between items-end mb-8">
+            <div>
+              <h1 id="pageTitle" class="text-3xl font-bold text-slate-800 mb-2">Visión General</h1>
+              <p id="pageSubtitle" class="text-slate-500">Monitoreo de indicadores clave</p>
+            </div>
+            <button class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 flex items-center">
+              <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>
+              Descargar Reporte
+            </button>
+          </div>
+
+          <!-- VIEWS CONTAINER -->
+          <div id="views" class="fade-in-up">
+
+            <!-- =========================
+                 OVERVIEW
+            ========================== -->
+            <section data-view="Overview">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Proyectos Totales -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
+                    <i data-lucide="flask-conical" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    +4 nuevos
+                    </div>
+                </div>
+                <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">Proyectos Totales</h3>
+                <div class="text-3xl font-extrabold text-slate-900">24</div>
+                </div>
+
+                <!-- Ejecución Presup. -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600">
+                    <i data-lucide="wallet" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    +2.1%
+                    </div>
+                </div>
+                <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">Ejecución Presup.</h3>
+                <div class="text-3xl font-extrabold text-slate-900">84.2%</div>
+                </div>
+
+                <!-- Publicaciones 2024 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="p-3 rounded-xl bg-purple-50 text-purple-600">
+                    <i data-lucide="book-open" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-600">
+                    Vol. 14 Meta
+                    </div>
+                </div>
+                <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">Publicaciones 2024</h3>
+                <div class="text-3xl font-extrabold text-slate-900">12</div>
+                </div>
+
+                <!-- Convenios Activos -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
+                    <i data-lucide="handshake" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    83% Vigencia
+                    </div>
+                </div>
+                <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">Convenios Activos</h3>
+                <div class="text-3xl font-extrabold text-slate-900">15</div>
+                </div>
+            </div>
+
+            <!-- Grillas principales -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Ejecución mensual consolidada (gráfica barras) -->
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 pb-4">
+                    <h2 class="text-lg font-extrabold text-slate-900">Ejecución Mensual Consolidada</h2>
+                    <p class="text-sm text-slate-400 font-semibold mt-1">Presupuesto Institucional DI/CIDI/CITAM</p>
+                </div>
+
+                <!-- zona de chart -->
+                <div class="px-6 pb-6">
+                    <div class="h-80 rounded-xl border border-slate-100 bg-white relative">
+                    <!-- leyenda -->
+                    <div class="absolute top-4 right-4 flex items-center gap-4 text-sm font-bold">
+                        <div class="flex items-center gap-2 text-slate-600">
+                        <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+                        <span>Asignado</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-600">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                        <span>Ejecutado</span>
+                        </div>
+                    </div>
+
+                    <!-- placeholder -->
+
+                        <div class="h-80 rounded-xl border border-slate-100 bg-white relative p-4">
+                        <canvas id="ejecucionMensualChart"></canvas>
+                        </div>
+
+
+
+                    <!-- guía de meses (opcional, estilo similar) -->
+                    <div class="absolute bottom-4 left-0 right-0 px-10 flex justify-between text-[11px] font-semibold text-slate-400">
+                        <span>Ene</span><span>Feb</span><span>Mar</span><span>Abr</span><span>May</span><span>Jun</span>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Distribución por unidad (donut) -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 pb-4">
+                    <h2 class="text-lg font-extrabold text-slate-900">Distribución por Unidad</h2>
+                    <p class="text-sm text-slate-400 font-semibold mt-1">Carga de proyectos actual</p>
+                </div>
+
+                <div class="px-6 pb-6">
+                    <!-- donut -->
+                    <div class="flex items-center justify-center py-6">
+                    <div class="relative w-44 h-44 flex items-center justify-center">
+                        <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <!-- base -->
+                        <circle cx="50" cy="50" r="36" fill="transparent" stroke="#E5E7EB" stroke-width="10"></circle>
+
+                        <!-- DI 40% -->
+                        <circle
+                            cx="50" cy="50" r="36"
+                            fill="transparent"
+                            stroke="#2563EB"
+                            stroke-width="10"
+                            stroke-linecap="round"
+                            stroke-dasharray="90 226"
+                            stroke-dashoffset="0"
+                        ></circle>
+
+                        <!-- CIDI 30% -->
+                        <circle
+                            cx="50" cy="50" r="36"
+                            fill="transparent"
+                            stroke="#8B5CF6"
+                            stroke-width="10"
+                            stroke-linecap="round"
+                            stroke-dasharray="68 226"
+                            stroke-dashoffset="-90"
+                        ></circle>
+
+                        <!-- CITAM 30% -->
+                        <circle
+                            cx="50" cy="50" r="36"
+                            fill="transparent"
+                            stroke="#10B981"
+                            stroke-width="10"
+                            stroke-linecap="round"
+                            stroke-dasharray="68 226"
+                            stroke-dashoffset="-158"
+                        ></circle>
+                        </svg>
+                    </div>
+                    </div>
+
+                    <!-- separador sutil -->
+                    <div class="border-t border-slate-100 pt-4 grid grid-cols-3 gap-3 text-center">
+                    <div class="py-2">
+                        <div class="flex items-center justify-center gap-2 text-xs font-bold text-slate-400">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                        <span>DI</span>
+                        </div>
+                        <div class="text-sm font-extrabold text-slate-900 mt-1">40%</div>
+                    </div>
+
+                    <div class="py-2">
+                        <div class="flex items-center justify-center gap-2 text-xs font-bold text-slate-400">
+                        <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+                        <span>CIDI</span>
+                        </div>
+                        <div class="text-sm font-extrabold text-slate-900 mt-1">30%</div>
+                    </div>
+
+                    <div class="py-2">
+                        <div class="flex items-center justify-center gap-2 text-xs font-bold text-slate-400">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <span>CITAM</span>
+                        </div>
+                        <div class="text-sm font-extrabold text-slate-900 mt-1">30%</div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- =========================
+                 Investigación Institucional
+            ========================== -->
+            <!-- Vista: Investigación Institucional -->
+            <section data-view="InvestigacionInstitucional" class="space-y-6">
+              <!-- Header -->
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <button
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-sm hover:bg-blue-700 transition">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    Nuevo Proyecto
+                  </button>
+
+                  <button
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-sm hover:bg-slate-50 transition">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    Reporte
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filters -->
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-5">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  <!-- Search -->
+                  <div class="lg:col-span-2">
+                    <div class="relative">
+                      <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                      <input
+                        type="text"
+                        placeholder="Buscar por título o investigador..."
+                        class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Select unidad -->
+                  <div>
+                    <div class="relative">
+                      <select
+                        class="w-full appearance-none px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300">
+                        <option>Todas las Unidades</option>
+                        <option>Dirección de Investigación</option>
+                        <option>CIDI</option>
+                        <option>CITAM</option>
+                      </select>
+                      <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cards list -->
+              <div class="space-y-6">
+                <!-- Card 1 -->
+                <article class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <div class="p-6">
+                    <div class="flex items-start justify-between gap-4">
+                      <div class="min-w-0">
+                        <div class="inline-flex items-center px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-[11px] font-extrabold tracking-wider uppercase">
+                          Dirección de Investigación
+                        </div>
+
+                        <h2 class="mt-3 text-lg md:text-xl font-extrabold text-slate-900">
+                          Impacto de la IA en la educación superior de Sonsonate
+                        </h2>
+                      </div>
+
+                      <span class="shrink-0 inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-extrabold">
+                        En ejecución
+                      </span>
+                    </div>
+
+                    <!-- Info grid -->
+                    <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div class="flex items-center gap-2 text-slate-600 font-semibold">
+                        <i data-lucide="user" class="w-4 h-4 text-slate-400"></i>
+                        <span>Responsable: Dr. Juan Pérez</span>
+                      </div>
+
+                      <div class="flex items-center gap-2 text-slate-600 font-semibold">
+                        <i data-lucide="filter" class="w-4 h-4 text-slate-400"></i>
+                        <span>Diseño: Explicativa (Mixta)</span>
+                      </div>
+
+                      <div class="flex items-center gap-2 text-slate-600 font-semibold">
+                        <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+                        <span>Periodo: 2023-02-01 - 2023-11-30</span>
+                      </div>
+
+                      <div class="flex items-center gap-2 text-slate-600 font-semibold">
+                        <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
+                        <span>Frascati: Ciencias Sociales</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="border-t border-slate-100 px-6 py-4">
+                    <div class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">
+                      Productos derivados
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold">
+                        <i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i>
+                        Artículo Científico: IA en aulas rurales
+                      </span>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <div class="p-6">
+                    <div class="flex items-start justify-between gap-4">
+                      <div class="min-w-0">
+                        <div class="inline-flex items-center px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-extrabold tracking-wider uppercase">
+                          CITAM
+                        </div>
+
+                        <h2 class="mt-3 text-lg md:text-xl font-extrabold text-slate-900">
+                          Prototipo de sistema de riego automatizado para sector agrícola
+                        </h2>
+                      </div>
+
+                      <span class="shrink-0 inline-flex items-center px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-extrabold">
+                        Finalizado
+                      </span>
+                    </div>
+
+                    <!-- Info grid -->
+                    <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div class="flex items-center gap-2 text-slate-600 font-semibold">
+                        <i data-lucide="user" class="w-4 h-4 text-slate-400"></i>
+                        <span>Responsable: Ing. María López</span>
+                      </div>
+
+                      <div class="flex items-center gap-2 text-slate-600 font-semibold">
+                        <i data-lucide="filter" class="w-4 h-4 text-slate-400"></i>
+                        <span>Diseño: Experimental (Cuantitativa)</span>
+                      </div>
+
+                      <div class="flex items-center gap-2 text-slate-600 font-semibold">
+                        <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+                        <span>Periodo: 2023-01-15 - 2023-08-15</span>
+                      </div>
+
+                      <div class="flex items-center gap-2 text-slate-600 font-semibold">
+                        <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
+                        <span>Frascati: Ingeniería y Tecnología</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="border-t border-slate-100 px-6 py-4">
+                    <div class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">
+                      Productos derivados
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold">
+                        <i data-lucide="cpu" class="w-4 h-4 text-slate-400"></i>
+                        Prototipo: Sistema Riego v1.0
+                      </span>
+
+                      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold">
+                        <i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i>
+                        Informe Técnico: Validación de campo
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+
+            <!-- =========================
+                 Presupuesto
+            ========================== -->
+            <section data-view="Presupuesto" class="space-y-6">
+            <!-- Card: Chart -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <div class="p-6 pb-2">
+                <h2 class="text-lg font-extrabold text-slate-900">Aprobado vs. Ejecutado Mensual</h2>
+              </div>
+
+              <!-- Chart container -->
+              <div class="px-6 pb-6">
+                <div class="h-80 rounded-xl border border-slate-100 bg-white p-4">
+                  <!-- Canvas para Chart.js -->
+                  <canvas id="aprobadoEjecutadoChart" class="w-full h-full"></canvas>
+                </div>
+
+              
+              </div>
+            </div>
+
+            <!-- Card: Table -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="min-w-full">
+                  <thead class="bg-slate-50">
+                    <tr class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider">
+                      <th class="px-6 py-4">Mes</th>
+                      <th class="px-6 py-4">Aprobado</th>
+                      <th class="px-6 py-4">Ejecutado</th>
+                      <th class="px-6 py-4">Saldo</th>
+                      <th class="px-6 py-4 text-right">Estado</th>
+                    </tr>
+                  </thead>
+
+                  <tbody class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-6 py-5 font-bold text-slate-800">Ene</td>
+                      <td class="px-6 py-5 font-semibold text-slate-700">$5,000</td>
+                      <td class="px-6 py-5 font-extrabold text-blue-600">$4,800</td>
+                      <td class="px-6 py-5 font-semibold text-slate-700">$200</td>
+                      <td class="px-6 py-5 text-right">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-extrabold">
+                          En rango
+                        </span>
+                      </td>
+                    </tr>
+
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-6 py-5 font-bold text-slate-800">Feb</td>
+                      <td class="px-6 py-5 font-semibold text-slate-700">$5,000</td>
+                      <td class="px-6 py-5 font-extrabold text-blue-600">$5,100</td>
+                      <td class="px-6 py-5 font-semibold text-slate-700">$-100</td>
+                      <td class="px-6 py-5 text-right">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-extrabold">
+                          Déficit
+                        </span>
+                      </td>
+                    </tr>
+
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-6 py-5 font-bold text-slate-800">Mar</td>
+                      <td class="px-6 py-5 font-semibold text-slate-700">$5,000</td>
+                      <td class="px-6 py-5 font-extrabold text-blue-600">$2,000</td>
+                      <td class="px-6 py-5 font-semibold text-slate-700">$3,000</td>
+                      <td class="px-6 py-5 text-right">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-extrabold">
+                          En rango
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+            <!-- =========================
+                 Revista integracion
+            ========================== -->
+            <!-- Vista: Seguimiento Editorial (OJS) -->
+            <section data-view="SeguimientoEditorial" class="space-y-8">
+              <!-- KPIs superiores -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Números publicados -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="flex items-start justify-between">
+                    <div class="p-3 rounded-2xl bg-purple-50 text-purple-600">
+                      <i data-lucide="book-open" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-600">
+                      Vol. 14 Núm. 1
+                    </span>
+                  </div>
+
+                  <div class="mt-6">
+                    <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                      Números publicados
+                    </div>
+                    <div class="mt-2 text-3xl font-extrabold text-slate-900">1</div>
+                  </div>
+                </div>
+
+                <!-- Artículos en revisión -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="flex items-start justify-between">
+                    <div class="p-3 rounded-2xl bg-blue-50 text-blue-600">
+                      <i data-lucide="file-text" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-600">
+                      Para Núm. 2
+                    </span>
+                  </div>
+
+                  <div class="mt-6">
+                    <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                      Artículos en revisión
+                    </div>
+                    <div class="mt-2 text-3xl font-extrabold text-slate-900">8</div>
+                  </div>
+                </div>
+
+                <!-- Días para cierre -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="flex items-start justify-between">
+                    <div class="p-3 rounded-2xl bg-amber-50 text-amber-600">
+                      <i data-lucide="clock" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-600">
+                      Dic. 2024
+                    </span>
+                  </div>
+
+                  <div class="mt-6">
+                    <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                      Días para cierre
+                    </div>
+                    <div class="mt-2 text-3xl font-extrabold text-slate-900">45</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bloques principales -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Seguimiento Editorial Anual -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <div class="p-6 pb-4">
+                    <h2 class="text-lg font-extrabold text-slate-900">Seguimiento Editorial Anual</h2>
+                    <p class="text-sm font-semibold text-slate-400 mt-1">Estado de números planificados</p>
+                  </div>
+
+                  <div class="p-6 pt-2 space-y-5">
+                    <!-- Card Numero 1 -->
+                    <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5">
+                      <div class="flex items-start justify-between gap-4">
+                        <div>
+                          <h3 class="text-base font-extrabold text-slate-900">Número 1 (Vol. 14)</h3>
+                          <p class="text-sm font-semibold text-slate-400 mt-1">Fecha prevista: Junio 2024</p>
+                        </div>
+                        <span class="shrink-0 text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                          PUBLICADO
+                        </span>
+                      </div>
+
+                      <!-- Barra progreso -->
+                      <div class="mt-4">
+                        <div class="h-2.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                          <div class="h-full w-full bg-emerald-500 rounded-full"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Card Numero 2 -->
+                    <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5">
+                      <div class="flex items-start justify-between gap-4">
+                        <div>
+                          <h3 class="text-base font-extrabold text-slate-900">Número 2 (Vol. 14)</h3>
+                          <p class="text-sm font-semibold text-slate-400 mt-1">Fecha prevista: Diciembre 2024</p>
+                        </div>
+                        <span class="shrink-0 text-xs font-extrabold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
+                          EN PROCESO
+                        </span>
+                      </div>
+
+                      <!-- Barra progreso -->
+                      <div class="mt-4">
+                        <div class="h-2.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                          <!-- Ajusta el porcentaje -->
+                          <div class="h-full w-2/3 bg-blue-600 rounded-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- KPIs de Calidad Editorial -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <div class="p-6 pb-4">
+                    <h2 class="text-lg font-extrabold text-slate-900">KPIs de Calidad Editorial</h2>
+                    <p class="text-sm font-semibold text-slate-400 mt-1">Métricas de impacto OJS</p>
+                  </div>
+
+                  <div class="p-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <!-- Tasa de aceptación -->
+                      <div class="rounded-2xl border border-slate-100 bg-indigo-50 p-5">
+                        <div class="text-[11px] font-extrabold uppercase tracking-wider text-indigo-600/80">
+                          Tasa de aceptación
+                        </div>
+                        <div class="mt-2 text-3xl font-extrabold text-indigo-700">32%</div>
+                      </div>
+
+                      <!-- Citas recibidas -->
+                      <div class="rounded-2xl border border-slate-100 bg-purple-50 p-5">
+                        <div class="text-[11px] font-extrabold uppercase tracking-wider text-purple-600/80">
+                          Citas recibidas
+                        </div>
+                        <div class="mt-2 text-3xl font-extrabold text-purple-700">142</div>
+                      </div>
+
+                      <!-- Descargas/mes -->
+                      <div class="rounded-2xl border border-slate-100 bg-cyan-50 p-5">
+                        <div class="text-[11px] font-extrabold uppercase tracking-wider text-cyan-700/80">
+                          Descargas / mes
+                        </div>
+                        <div class="mt-2 text-3xl font-extrabold text-cyan-800">2.1k</div>
+                      </div>
+
+                      <!-- Indexaciones -->
+                      <div class="rounded-2xl border border-slate-100 bg-emerald-50 p-5">
+                        <div class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700/80">
+                          Indexaciones
+                        </div>
+                        <div class="mt-2 text-3xl font-extrabold text-emerald-800">5</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+
+            <!-- =========================
+                 ConveniosRegistro 
+            ========================== -->
+            <!-- Vista: Convenios / Registro de Instituciones Contraparte -->
+            <section data-view="ConveniosRegistro" class="space-y-8">
+              <!-- KPIs -->
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Total Convenios -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="p-3 rounded-2xl bg-blue-50 text-blue-600 inline-flex">
+                    <i data-lucide="handshake" class="w-6 h-6"></i>
+                  </div>
+                  <div class="mt-6 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                    Total Convenios
+                  </div>
+                  <div class="mt-2 text-3xl font-extrabold text-slate-900">18</div>
+                </div>
+
+                <!-- Vigentes -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="flex items-start justify-between">
+                    <div class="p-3 rounded-2xl bg-emerald-50 text-emerald-600 inline-flex">
+                      <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                      83%
+                    </span>
+                  </div>
+                  <div class="mt-6 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                    Vigentes
+                  </div>
+                  <div class="mt-2 text-3xl font-extrabold text-slate-900">15</div>
+                </div>
+
+                <!-- Internacionales -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="p-3 rounded-2xl bg-purple-50 text-purple-600 inline-flex">
+                    <i data-lucide="globe" class="w-6 h-6"></i>
+                  </div>
+                  <div class="mt-6 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                    Internacionales
+                  </div>
+                  <div class="mt-2 text-3xl font-extrabold text-slate-900">6</div>
+                </div>
+
+                <!-- Actividades Activas -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="p-3 rounded-2xl bg-amber-50 text-amber-600 inline-flex">
+                    <i data-lucide="zap" class="w-6 h-6"></i>
+                  </div>
+                  <div class="mt-6 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                    Actividades Activas
+                  </div>
+                  <div class="mt-2 text-3xl font-extrabold text-slate-900">42</div>
+                </div>
+              </div>
+
+              <!-- Tabla -->
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 pb-4">
+                  <h2 class="text-lg font-extrabold text-slate-900">Registro de Instituciones Contraparte</h2>
+                  <p class="text-sm font-semibold text-slate-400 mt-1">Seguimiento de convenios y vencimientos</p>
+                </div>
+
+                <div class="overflow-x-auto">
+                  <table class="min-w-full">
+                    <thead class="bg-slate-50">
+                      <tr class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider">
+                        <th class="px-6 py-4">Institución</th>
+                        <th class="px-6 py-4">Tipo</th>
+                        <th class="px-6 py-4">Vencimiento</th>
+                        <th class="px-6 py-4">Estado</th>
+                        <th class="px-6 py-4 text-right">Actividades</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-100">
+                      <tr class="hover:bg-slate-50/60">
+                        <td class="px-6 py-5 font-extrabold text-slate-900">Ministerio de Educación</td>
+                        <td class="px-6 py-5 font-semibold text-slate-600">Nacional</td>
+                        <td class="px-6 py-5 font-semibold text-slate-600">2025-12</td>
+                        <td class="px-6 py-5">
+                          <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-extrabold">
+                            VIGENTE
+                          </span>
+                        </td>
+                        <td class="px-6 py-5 text-right font-extrabold text-slate-900">4</td>
+                      </tr>
+
+                      <tr class="hover:bg-slate-50/60">
+                        <td class="px-6 py-5 font-extrabold text-slate-900">Universidad de Madrid</td>
+                        <td class="px-6 py-5 font-semibold text-slate-600">Internacional</td>
+                        <td class="px-6 py-5 font-semibold text-slate-600">2026-06</td>
+                        <td class="px-6 py-5">
+                          <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-extrabold">
+                            VIGENTE
+                          </span>
+                        </td>
+                        <td class="px-6 py-5 text-right font-extrabold text-slate-900">2</td>
+                      </tr>
+
+                      <tr class="hover:bg-slate-50/60">
+                        <td class="px-6 py-5 font-extrabold text-slate-900">ONG Plan El Salvador</td>
+                        <td class="px-6 py-5 font-semibold text-slate-600">Nacional</td>
+                        <td class="px-6 py-5 font-semibold text-slate-600">2024-01</td>
+                        <td class="px-6 py-5">
+                          <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-extrabold">
+                            VENCIDO
+                          </span>
+                        </td>
+                        <td class="px-6 py-5 text-right font-extrabold text-slate-900">8</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <!-- =========================
+                 CITAM / CIDI 
+            ========================== -->
+            <!-- Vista: Módulos CITAM / CIDI -->
+            <section data-view="ModulosCITAM_CIDI" class="space-y-8">
+              <!-- Encabezados de módulos -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Header CITAM -->
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center shadow-sm">
+                    <i data-lucide="zap" class="w-5 h-5"></i>
+                  </div>
+                  <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">CITAM</h1>
+                </div>
+
+                <!-- Header CIDI -->
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-cyan-500 text-white flex items-center justify-center shadow-sm">
+                    <i data-lucide="target" class="w-5 h-5"></i>
+                  </div>
+                  <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">CIDI</h1>
+                </div>
+              </div>
+
+              <!-- KPI cards (2 columnas por módulo) -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- ====== CITAM ====== -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <!-- Investigación aplicada -->
+                  <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                    <div class="p-3 rounded-2xl bg-orange-50 text-orange-600 inline-flex">
+                      <i data-lucide="flask-conical" class="w-6 h-6"></i>
+                    </div>
+
+                    <div class="mt-6 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                      Investigación aplicada
+                    </div>
+                    <div class="mt-2 text-3xl font-extrabold text-slate-900">12</div>
+                  </div>
+
+                  <!-- Transferencia Tec -->
+                  <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                    <div class="p-3 rounded-2xl bg-amber-50 text-amber-600 inline-flex">
+                      <i data-lucide="trending-up" class="w-6 h-6"></i>
+                    </div>
+
+                    <div class="mt-6 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                      Transferencia Tec.
+                    </div>
+                    <div class="mt-2 text-3xl font-extrabold text-slate-900">4</div>
+                  </div>
+                </div>
+
+                <!-- ====== CIDI ====== -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <!-- Proyectos Innovación -->
+                  <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                    <div class="p-3 rounded-2xl bg-cyan-50 text-cyan-600 inline-flex">
+                      <i data-lucide="target" class="w-6 h-6"></i>
+                    </div>
+
+                    <div class="mt-6 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                      Proyectos Innovación
+                    </div>
+                    <div class="mt-2 text-3xl font-extrabold text-slate-900">8</div>
+                  </div>
+
+                  <!-- Prototipos / Diseño -->
+                  <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                    <div class="p-3 rounded-2xl bg-sky-50 text-sky-600 inline-flex">
+                      <i data-lucide="settings" class="w-6 h-6"></i>
+                    </div>
+
+                    <div class="mt-6 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                      Prototipos / Diseño
+                    </div>
+                    <div class="mt-2 text-3xl font-extrabold text-slate-900">3</div>
+                  </div>
+                </div>
+              </div>
+              </section>
+
+
+
+
+            <!-- =========================
+                 ACREDITACION (placeholder corto)
+            ========================== -->
+            <section data-view="Acreditacion" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Indicadores Totales -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-indigo-50 text-indigo-600">
+                        <i data-lucide="target" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Indicadores Totales</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">45</div>
+                    <p class="text-slate-500 text-sm font-medium">Monitoreados</p>
+                    </div>
+
+                    <!-- Cumplimiento -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600">
+                        <i data-lucide="check-circle" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +2%
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Cumplimiento</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">85%</div>
+                    <p class="text-slate-500 text-sm font-medium">Global</p>
+                    </div>
+
+                    <!-- Alertas -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-rose-50 text-rose-600">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Alertas</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">3</div>
+                    <p class="text-slate-500 text-sm font-medium">No cumplen criterio</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100">
+                    <h3 class="font-bold text-slate-800">Matriz de Acreditación</h3>
+                    <p class="text-sm text-slate-500">Vinculación de Proyectos, Productos y Convenios</p>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-50 text-slate-500 text-xs uppercase font-semibold">
+                        <tr>
+                            <th class="p-4">Dimensión / Criterio</th>
+                            <th class="p-4">Indicador</th>
+                            <th class="p-4">Asociación (Proyecto/Prod/Conv)</th>
+                            <th class="p-4 text-center">Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="p-4 font-medium text-slate-700">
+                            <div class="text-xs text-slate-500 mb-1">Dimensión 4: Proyección</div>
+                            Criterio 4.1: Vinculación Social
+                            </td>
+                            <td class="p-4 text-slate-600">Impacto en comunidades vulnerables</td>
+                            <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="sprout" class="w-4 h-4 text-emerald-600"></i>
+                                <span>Pry: USOVerde Fase 2</span>
+                            </div>
+                            </td>
+                            <td class="p-4 text-center">
+                            <span class="traffic" data-status="Cumple"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="p-4 font-medium text-slate-700">
+                            <div class="text-xs text-slate-500 mb-1">Dimensión 2: Investigación</div>
+                            Criterio 2.3: Publicaciones
+                            </td>
+                            <td class="p-4 text-slate-600">Papers publicados por año</td>
+                            <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i>
+                                <span>Prod: Artículo IEEE Nexus</span>
+                            </div>
+                            </td>
+                            <td class="p-4 text-center">
+                            <span class="traffic" data-status="En proceso"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="p-4 font-medium text-slate-700">
+                            <div class="text-xs text-slate-500 mb-1">Dimensión 1: Docencia</div>
+                            Criterio 1.5: Convenios Activos
+                            </td>
+                            <td class="p-4 text-slate-600">Movilidad estudiantil</td>
+                            <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="globe" class="w-4 h-4 text-indigo-600"></i>
+                                <span>Conv: Erasmus+ 2024</span>
+                            </div>
+                            </td>
+                            <td class="p-4 text-center">
+                            <span class="traffic" data-status="No cumple"></span>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </section>
+
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Lucide icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    const labels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'];
+    const dataAsignado = [5200, 5100, 7400, 6000, 8200, 7800];
+    const dataEjecutado = [4100, 4800, 6900, 5800, 8500, 6200];
+
+    const ctx = document.getElementById('ejecucionMensualChart');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Asignado',
+        data: dataAsignado,
+        backgroundColor: '#2563EB', // azul
+        borderRadius: 6
+      },
+      {
+        label: 'Ejecutado',
+        data: dataEjecutado,
+        backgroundColor: '#10B981', // verde
+        borderRadius: 6
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          usePointStyle: true,
+          font: { weight: 'bold' }
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `$ ${ctx.parsed.y.toLocaleString()}`
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: (value) => `$${value / 1000}k`
+        }
+      }
+    }
+  }
+});
+
+  
+    // ====== Estado ======
+    let activeTab = "Overview";
+
+    const titles = {
+      Overview: "Visión General",
+      InvestigacionInstitucional: "Investigacion Institucional",
+      Presupuesto: "Ejecución Financiera",
+      SeguimientoEditorial: "Revista Integración",
+      ConveniosRegistro: "Convenios",
+      ModulosCITAM_CIDI: "CITAM / CIDI",
+      Acreditacion: "Sistema de Acreditación",
+    };
+
+    // ====== Helpers ======
+    function setSidebarStyles() {
+      document.querySelectorAll(".sidebar-item").forEach(btn => {
+        const isActive = btn.dataset.tab === activeTab;
+        btn.classList.toggle("bg-blue-50", isActive);
+        btn.classList.toggle("border-r-4", isActive);
+        btn.classList.toggle("border-blue-600", isActive);
+        btn.classList.toggle("text-blue-900", isActive);
+        btn.classList.toggle("font-semibold", isActive);
+
+        if (!isActive) {
+          btn.classList.add("text-slate-500");
+          btn.classList.remove("text-blue-900", "font-semibold", "bg-blue-50", "border-r-4", "border-blue-600");
+          btn.classList.add("hover:bg-slate-50", "hover:text-blue-700");
+        }
+
+        // ícono
+        const icon = btn.querySelector("svg, i[data-lucide]");
+        if (icon) {
+          icon.classList.toggle("text-blue-600", isActive);
+          icon.classList.toggle("text-slate-400", !isActive);
+          icon.classList.add("group-hover:text-blue-500");
+        }
+      });
+    }
+
+    function setView() {
+      // title
+      document.getElementById("pageTitle").textContent = titles[activeTab] || "Dashboard";
+
+      // views
+      document.querySelectorAll("[data-view]").forEach(sec => {
+        sec.classList.toggle("hidden", sec.dataset.view !== activeTab);
+      });
+
+      // re-trigger animation
+      const views = document.getElementById("views");
+      views.classList.remove("fade-in-up");
+      void views.offsetWidth; // reflow
+      views.classList.add("fade-in-up");
+
+      setSidebarStyles();
+
+      // re-render lucide icons after DOM updates
+      if (window.lucide) lucide.createIcons();
+      hydrateWidgets();
+
+    }
+
+    // ====== Events ======
+    document.getElementById("sidebarNav").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-tab]");
+      if (!btn) return;
+      activeTab = btn.dataset.tab;
+      setView();
+    });
+    function renderTrafficLight(el, status) {
+  let cls = "bg-slate-100 text-slate-500";
+  let icon = "alert-circle";
+  let text = "Desconocido";
+
+  if (status === "Cumple") {
+    cls = "bg-emerald-100 text-emerald-700 border border-emerald-200";
+    icon = "check-circle";
+    text = "Cumple";
+  } else if (status === "En proceso") {
+    cls = "bg-amber-100 text-amber-700 border border-amber-200";
+    icon = "alert-triangle";
+    text = "En Proceso";
+  } else if (status === "No cumple") {
+    cls = "bg-rose-100 text-rose-700 border border-rose-200";
+    icon = "x-circle";
+    text = "No Cumple";
+  }
+
+  el.innerHTML = `
+    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold w-max ${cls}">
+      <i data-lucide="${icon}" class="w-3 h-3 mr-1.5"></i>${text}
+    </span>
+  `;
+}
+
+function renderComparisonChart(el, label, series, barColor) {
+  const values = series.map(d => d.value);
+  const max = Math.max(...values) * 1.1;
+
+  // Variación 23-24 (toma el último vs el penúltimo)
+  const a = series[series.length - 2]?.value ?? 0;
+  const b = series[series.length - 1]?.value ?? 0;
+  const pct = a ? ((b - a) / a) * 100 : 0;
+  const pctTxt = `${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`;
+  const pctCls = (b >= a) ? "text-emerald-600" : "text-rose-600";
+
+  const bars = series.map(item => {
+    const h = max ? (item.value / max) * 100 : 0;
+    return `
+      <div class="flex-1 flex flex-col items-center justify-end group h-32">
+        <div class="mb-2 text-xs font-bold text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity">
+          ${item.value}
+        </div>
+        <div class="w-full rounded-t-md transition-all duration-700 ease-out hover:opacity-80 relative ${barColor}"
+             style="height:${h}%"></div>
+        <span class="text-[10px] text-slate-400 font-medium mt-2">${item.year}</span>
+      </div>
+    `;
+  }).join("");
+
+  el.innerHTML = `
+    <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex flex-col h-full min-h-[200px]">
+      <h4 class="text-sm font-bold text-slate-700 mb-4 flex items-center justify-between">
+        ${label}
+        <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+      </h4>
+
+      <div class="flex items-end justify-between space-x-3 flex-1 pb-2">
+        ${bars}
+      </div>
+
+      <div class="mt-2 pt-3 border-t border-slate-50 flex justify-between items-center text-xs">
+        <span class="text-slate-400">Var. 23-24</span>
+        <span class="font-bold ${pctCls}">${pctTxt}</span>
+      </div>
+    </div>
+  `;
+}
+
+function hydrateWidgets() {
+  // Comparison charts
+  document.querySelectorAll(".cmp-chart").forEach(el => {
+    const label = el.dataset.label || "Chart";
+    const color = el.dataset.color || "bg-blue-500";
+    let series = [];
+    try { series = JSON.parse(el.dataset.series || "[]"); } catch(e) {}
+    renderComparisonChart(el, label, series, color);
+  });
+
+  // Traffic lights
+  document.querySelectorAll(".traffic").forEach(el => {
+    const status = el.dataset.status || "Desconocido";
+    renderTrafficLight(el, status);
+  });
+
+  // Re-render lucide icons
+  if (window.lucide) lucide.createIcons();
+}
+
+
+    // init
+    lucide.createIcons();
+    setView();
+  </script>
+  <script>
+  // Datos ejemplo (coinciden con la tabla)
+  const labels2 = ["Ene", "Feb", "Mar"];
+  const aprobado = [5000, 5000, 5000];
+  const ejecutado = [4800, 5100, 2000];
+
+  const ctx2 = document.getElementById("aprobadoEjecutadoChart");
+
+  new Chart(ctx2, {
+    type: "bar",
+    data: {
+      labels2,
+      datasets: [
+        {
+          label: "Presupuesto Aprobado",
+          data: aprobado,
+          backgroundColor: "#94A3B8", // slate-400
+          borderRadius: 8,
+          barThickness: 56
+        },
+        {
+          label: "Presupuesto Ejecutado",
+          data: ejecutado,
+          backgroundColor: "#2563EB", // blue-600
+          borderRadius: 8,
+          barThickness: 56
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            usePointStyle: true
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: (c) => `${c.dataset.label}: $${c.parsed.y.toLocaleString()}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { weight: "600" } }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: (v) => v.toLocaleString()
+          }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>

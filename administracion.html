@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard AD</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Animación simple (porque Tailwind CDN no trae keyframes custom por defecto) */
+    .fade-in-up { animation: fadeInUp .35s ease-out both; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    /* Opcional: ocultar scrollbar (estético) */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+
+<body class="bg-slate-50">
+  <div class="flex h-screen font-sans overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 shadow-lg">
+      <div class="p-8 flex items-center">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center mr-3 flex-shrink-0 shadow-blue-200 shadow-lg">
+          <span class="text-white font-bold text-lg">AD</span>
+        </div>
+        <span class="text-sm font-bold text-slate-800 tracking-tight leading-tight">
+          Administración<br/>
+        </span>
+      </div>
+
+      <div class="flex-1 overflow-y-auto py-4">
+        
+
+        <!-- Sidebar buttons (data-tab = id) -->
+        <nav id="sidebarNav">
+          <button data-tab="VisionGeneralAdministracion" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Visión General</span>
+          </button>
+
+          <button data-tab="CapacidadInfraestructura" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="graduation-cap" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Infraestructura</span>
+          </button>
+
+          <button data-tab="Acreditacion" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="shield-check" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Acreditación</span>
+          </button>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+
+      <!-- Top Header -->
+<header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 z-10 sticky top-0">
+  
+  <div class="flex items-center">
+    <div class="flex items-center md:hidden">
+      <i data-lucide="menu" class="text-slate-500 w-6 h-6 mr-4"></i>
+      <span class="font-bold text-slate-800 text-sm">Administración</span>
+    </div>
+    </div>
+
+  <div class="flex items-center h-full">
+    <a href="landing.html" class="block">
+      <div class="flex items-center h-16 px-2"> 
+        <img 
+          src="logousocompleto.png" 
+          alt="Logo" 
+          class="h-12 w-auto object-contain"
+        >
+      </div>
+    </a>
+  </div>
+
+</header>
+
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto p-8 scrollbar-hide">
+        <div class="max-w-7xl mx-auto">
+
+          <!-- Section Header -->
+          <div class="flex justify-between items-end mb-8">
+            <div>
+              <h1 id="pageTitle" class="text-3xl font-bold text-slate-800 mb-2">Visión General</h1>
+              <p id="pageSubtitle" class="text-slate-500">Monitoreo de indicadores clave</p>
+            </div>
+            <button class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 flex items-center">
+              <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>
+              Descargar Reporte
+            </button>
+          </div>
+
+          <!-- VIEWS CONTAINER -->
+          <div id="views" class="fade-in-up">
+
+            <!-- =========================
+                 OVERVIEW
+            ========================== -->
+            <!-- Vista: Visión General - Administración -->
+            <section data-view="VisionGeneralAdministracion">
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Cumplimiento Institucional -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 5.4%
+                    </div>
+                </div>
+                <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Cumplimiento Institucional</h3>
+                <div class="text-3xl font-bold text-slate-800 mb-1">84%</div>
+                <p class="text-slate-500 text-sm font-medium">Estado general</p>
+                </div>
+
+                <!-- Ocupación de Campus -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600">
+                    <i data-lucide="building-2" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 2.1%
+                    </div>
+                </div>
+                <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Ocupación de Campus</h3>
+                <div class="text-3xl font-bold text-slate-800 mb-1">78%</div>
+                <p class="text-slate-500 text-sm font-medium">Uso promedio</p>
+                </div>
+
+                <!-- Aulas Funcionales -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-purple-50 text-purple-600">
+                    <i data-lucide="monitor" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 1.5%
+                    </div>
+                </div>
+                <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Aulas Funcionales</h3>
+                <div class="text-3xl font-bold text-slate-800 mb-1">96%</div>
+                <p class="text-slate-500 text-sm font-medium">Operativas</p>
+                </div>
+
+                <!-- Indicadores en Verde -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-sky-50 text-sky-600">
+                    <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 8%
+                    </div>
+                </div>
+                <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Indicadores en Verde</h3>
+                <div class="text-3xl font-bold text-slate-800 mb-1">12</div>
+                <p class="text-slate-500 text-sm font-medium">Cumplidos</p>
+                </div>
+            </div>
+
+            <!-- Contenido principal -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Evolución de Cumplimiento -->
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-bold text-slate-800">Evolución de Cumplimiento</h2>
+
+                    <!-- Toggle (solo UI, sin JS) -->
+                    <div class="flex items-center bg-slate-50 border border-slate-100 rounded-xl p-1">
+                    <button class="px-3 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-blue-700 border border-slate-100">
+                        Semanal
+                    </button>
+                    <button class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-slate-600 transition">
+                        Mensual
+                    </button>
+                    </div>
+                </div>
+
+                <!-- Área para gráfica (canvas o svg) -->
+                <div class="h-64 md:h-72 lg:h-80 bg-white rounded-xl border border-slate-100 flex items-center justify-center">
+                    <div class="text-center">
+                    <div class="text-slate-400 text-sm font-semibold">Área de Gráfica</div>
+                    <div class="text-slate-300 text-xs">Aquí puedes renderizar Chart.js / ApexCharts</div>
+                    </div>
+                </div>
+
+                <!-- Etiquetas meses (como el mockup) -->
+                <div class="mt-5 flex justify-between text-[10px] font-bold text-slate-300 tracking-wider px-1">
+                    <span>ENE</span><span>FEB</span><span>MAR</span><span>ABR</span><span>MAY</span><span>JUN</span>
+                    <span>JUL</span><span>AGO</span><span>SEP</span><span>OCT</span><span>NOV</span><span>DIC</span>
+                </div>
+                </div>
+
+                <!-- Estado Global (donut) -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="text-center mb-6">
+                    <h3 class="text-lg font-bold text-slate-800">Estado Global</h3>
+                    <p class="text-xs text-slate-400 font-bold tracking-widest mt-1">CUMPLIMIENTO DE ACREDITACIÓN</p>
+                </div>
+
+                <!-- Donut (SVG puro) -->
+                <div class="flex items-center justify-center py-6">
+                    <div class="relative w-44 h-44 flex items-center justify-center">
+                    <!-- Centro -->
+                    <div class="text-center">
+                        <div class="text-2xl font-extrabold text-slate-800">84%</div>
+                        <div class="text-[10px] font-bold text-slate-400 tracking-widest">GLOBAL</div>
+                    </div>
+
+                    <!-- Anillos -->
+                    <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <!-- Base -->
+                        <circle cx="50" cy="50" r="38" fill="transparent" stroke="#E5E7EB" stroke-width="10"></circle>
+
+                        <!-- Cumplido 72% -->
+                        <circle
+                        cx="50" cy="50" r="38"
+                        fill="transparent"
+                        stroke="#2563EB"
+                        stroke-width="10"
+                        stroke-linecap="round"
+                        stroke-dasharray="172 239"
+                        stroke-dashoffset="0"
+                        class="opacity-90"
+                        ></circle>
+
+                        <!-- En Progreso 12% -->
+                        <circle
+                        cx="50" cy="50" r="38"
+                        fill="transparent"
+                        stroke="#A855F7"
+                        stroke-width="10"
+                        stroke-linecap="round"
+                        stroke-dasharray="29 239"
+                        stroke-dashoffset="-172"
+                        class="opacity-90"
+                        ></circle>
+
+                        <!-- No Cumple 16% (se deja en gris base) -->
+                    </svg>
+                    </div>
+                </div>
+
+                <!-- Leyenda -->
+                <div class="space-y-3 text-sm">
+                    <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                        <span class="text-slate-600 font-semibold">Cumplido</span>
+                    </div>
+                    <span class="font-bold text-slate-800">72%</span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+                        <span class="text-slate-600 font-semibold">En Progreso</span>
+                    </div>
+                    <span class="font-bold text-slate-800">12%</span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-slate-200"></span>
+                        <span class="text-slate-600 font-semibold">No Cumple</span>
+                    </div>
+                    <span class="font-bold text-slate-800">16%</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+
+            <!-- =========================
+                 INFRAESTRUCTURA
+            ========================== -->
+            <!-- Vista: Capacidad de Infraestructura -->
+            <section data-view="CapacidadInfraestructura">
+
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Área Total Campus -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
+                    <i data-lucide="building" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 2.5%
+                    </div>
+                </div>
+                <h3 class="text-slate-500 text-sm font-semibold mb-2">Área Total Campus</h3>
+                <div class="text-3xl font-extrabold text-slate-900">45,000 m²</div>
+                </div>
+
+                <!-- Aulas Disponibles -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-purple-50 text-purple-600">
+                    <i data-lucide="monitor" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 8%
+                    </div>
+                </div>
+                <h3 class="text-slate-500 text-sm font-semibold mb-2">Aulas Disponibles</h3>
+                <div class="text-3xl font-extrabold text-slate-900">124</div>
+                </div>
+
+                <!-- Laboratorios -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600">
+                    <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-slate-100 text-slate-600">
+                    <i data-lucide="arrow-down-right" class="w-3 h-3 mr-1"></i> 0%
+                    </div>
+                </div>
+                <h3 class="text-slate-500 text-sm font-semibold mb-2">Laboratorios</h3>
+                <div class="text-3xl font-extrabold text-slate-900">18</div>
+                </div>
+
+                <!-- Zonas Verdes -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-700">
+                    <i data-lucide="tree-pine" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 12%
+                    </div>
+                </div>
+                <h3 class="text-slate-500 text-sm font-semibold mb-2">Zonas Verdes</h3>
+                <div class="text-3xl font-extrabold text-slate-900">850 Árboles</div>
+                </div>
+            </div>
+
+            <!-- Contenido -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Tabla: Detalle por Edificio -->
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="flex items-center justify-between p-6">
+                    <h2 class="text-lg font-bold text-slate-900">Detalle por Edificio</h2>
+                    <a href="#" class="text-sm font-bold text-blue-600 hover:text-blue-700">Ver todo</a>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                    <thead class="bg-slate-50">
+                        <tr class="text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        <th class="px-6 py-4">Edificio</th>
+                        <th class="px-6 py-4">Aulas/Oficinas</th>
+                        <th class="px-6 py-4">Equipamiento</th>
+                        <th class="px-6 py-4">Estado AC</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50/60">
+                        <td class="px-6 py-5 font-bold text-slate-800">Edificio A - Ciencias</td>
+                        <td class="px-6 py-5 text-slate-600 font-semibold">24 / 12</td>
+                        <td class="px-6 py-5 text-slate-600">Proyector, SmartBoard</td>
+                        <td class="px-6 py-5">
+                            <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700">
+                            Operativo: 24,000 BTU
+                            </span>
+                        </td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/60">
+                        <td class="px-6 py-5 font-bold text-slate-800">Edificio B - Ingeniería</td>
+                        <td class="px-6 py-5 text-slate-600 font-semibold">30 / 15</td>
+                        <td class="px-6 py-5 text-slate-600">Laboratorios High-End</td>
+                        <td class="px-6 py-5">
+                            <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700">
+                            Operativo: 36,000 BTU
+                            </span>
+                        </td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/60">
+                        <td class="px-6 py-5 font-bold text-slate-800">Edificio C - Artes</td>
+                        <td class="px-6 py-5 text-slate-600 font-semibold">18 / 8</td>
+                        <td class="px-6 py-5 text-slate-600">Estudios, Taller</td>
+                        <td class="px-6 py-5">
+                            <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700">
+                            Operativo: 18,000 BTU
+                            </span>
+                        </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+
+                <!-- Recursos y Seguridad -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6">
+                    <h2 class="text-lg font-bold text-slate-900">Recursos y Seguridad</h2>
+                </div>
+
+                <div class="px-4 pb-6 space-y-3">
+                    <!-- Item -->
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-blue-600">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </span>
+                        <span class="font-bold text-slate-800">Parqueo Carros</span>
+                    </div>
+                    <span class="font-extrabold text-slate-900">450 plazas</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-blue-600">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </span>
+                        <span class="font-bold text-slate-800">Parqueo Motos</span>
+                    </div>
+                    <span class="font-extrabold text-slate-900">120 plazas</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-rose-600">
+                        <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                        </span>
+                        <span class="font-bold text-slate-800">Extintores</span>
+                    </div>
+                    <span class="font-extrabold text-slate-900">84 unidades</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-blue-600">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </span>
+                        <span class="font-bold text-slate-800">Baños totales</span>
+                    </div>
+                    <span class="font-extrabold text-slate-900">62 servicios</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+
+            <!-- =========================
+                 Acreditacion
+            ========================== -->
+            <section data-view="Acreditacion" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Indicadores Totales -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-indigo-50 text-indigo-600">
+                        <i data-lucide="target" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Indicadores Totales</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">45</div>
+                    <p class="text-slate-500 text-sm font-medium">Monitoreados</p>
+                    </div>
+
+                    <!-- Cumplimiento -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600">
+                        <i data-lucide="check-circle" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +2%
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Cumplimiento</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">85%</div>
+                    <p class="text-slate-500 text-sm font-medium">Global</p>
+                    </div>
+
+                    <!-- Alertas -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-rose-50 text-rose-600">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Alertas</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">3</div>
+                    <p class="text-slate-500 text-sm font-medium">No cumplen criterio</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100">
+                    <h3 class="font-bold text-slate-800">Matriz de Acreditación</h3>
+                    <p class="text-sm text-slate-500">Vinculación de Proyectos, Productos y Convenios</p>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-50 text-slate-500 text-xs uppercase font-semibold">
+                        <tr>
+                            <th class="p-4">Dimensión / Criterio</th>
+                            <th class="p-4">Indicador</th>
+                            <th class="p-4">Asociación (Proyecto/Prod/Conv)</th>
+                            <th class="p-4 text-center">Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="p-4 font-medium text-slate-700">
+                            <div class="text-xs text-slate-500 mb-1">Dimensión 4: Proyección</div>
+                            Criterio 4.1: Vinculación Social
+                            </td>
+                            <td class="p-4 text-slate-600">Impacto en comunidades vulnerables</td>
+                            <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="sprout" class="w-4 h-4 text-emerald-600"></i>
+                                <span>Pry: USOVerde Fase 2</span>
+                            </div>
+                            </td>
+                            <td class="p-4 text-center">
+                            <span class="traffic" data-status="Cumple"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="p-4 font-medium text-slate-700">
+                            <div class="text-xs text-slate-500 mb-1">Dimensión 2: Investigación</div>
+                            Criterio 2.3: Publicaciones
+                            </td>
+                            <td class="p-4 text-slate-600">Papers publicados por año</td>
+                            <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i>
+                                <span>Prod: Artículo IEEE Nexus</span>
+                            </div>
+                            </td>
+                            <td class="p-4 text-center">
+                            <span class="traffic" data-status="En proceso"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="p-4 font-medium text-slate-700">
+                            <div class="text-xs text-slate-500 mb-1">Dimensión 1: Docencia</div>
+                            Criterio 1.5: Convenios Activos
+                            </td>
+                            <td class="p-4 text-slate-600">Movilidad estudiantil</td>
+                            <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="globe" class="w-4 h-4 text-indigo-600"></i>
+                                <span>Conv: Erasmus+ 2024</span>
+                            </div>
+                            </td>
+                            <td class="p-4 text-center">
+                            <span class="traffic" data-status="No cumple"></span>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </section>
+
+
+
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Lucide icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    // ====== Estado ======
+    let activeTab = "VisionGeneralAdministracion";
+
+    const titles = {
+      VisionGeneralAdministracion: "Visión General",
+      CapacidadInfraestructura: "Capacidad de Infraestructura",
+      Acreditacion : "Acreditacion"
+    };
+
+    // ====== Helpers ======
+    function setSidebarStyles() {
+      document.querySelectorAll(".sidebar-item").forEach(btn => {
+        const isActive = btn.dataset.tab === activeTab;
+        btn.classList.toggle("bg-blue-50", isActive);
+        btn.classList.toggle("border-r-4", isActive);
+        btn.classList.toggle("border-blue-600", isActive);
+        btn.classList.toggle("text-blue-900", isActive);
+        btn.classList.toggle("font-semibold", isActive);
+
+        if (!isActive) {
+          btn.classList.add("text-slate-500");
+          btn.classList.remove("text-blue-900", "font-semibold", "bg-blue-50", "border-r-4", "border-blue-600");
+          btn.classList.add("hover:bg-slate-50", "hover:text-blue-700");
+        }
+
+        // ícono
+        const icon = btn.querySelector("svg, i[data-lucide]");
+        if (icon) {
+          icon.classList.toggle("text-blue-600", isActive);
+          icon.classList.toggle("text-slate-400", !isActive);
+          icon.classList.add("group-hover:text-blue-500");
+        }
+      });
+    }
+
+    function setView() {
+      // title
+      document.getElementById("pageTitle").textContent = titles[activeTab] || "Dashboard";
+
+      // views
+      document.querySelectorAll("[data-view]").forEach(sec => {
+        sec.classList.toggle("hidden", sec.dataset.view !== activeTab);
+      });
+
+      // re-trigger animation
+      const views = document.getElementById("views");
+      views.classList.remove("fade-in-up");
+      void views.offsetWidth; // reflow
+      views.classList.add("fade-in-up");
+
+      setSidebarStyles();
+
+      // re-render lucide icons after DOM updates
+      if (window.lucide) lucide.createIcons();
+      hydrateWidgets();
+
+    }
+
+    // ====== Events ======
+    document.getElementById("sidebarNav").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-tab]");
+      if (!btn) return;
+      activeTab = btn.dataset.tab;
+      setView();
+    });
+    function renderTrafficLight(el, status) {
+  let cls = "bg-slate-100 text-slate-500";
+  let icon = "alert-circle";
+  let text = "Desconocido";
+
+  if (status === "Cumple") {
+    cls = "bg-emerald-100 text-emerald-700 border border-emerald-200";
+    icon = "check-circle";
+    text = "Cumple";
+  } else if (status === "En proceso") {
+    cls = "bg-amber-100 text-amber-700 border border-amber-200";
+    icon = "alert-triangle";
+    text = "En Proceso";
+  } else if (status === "No cumple") {
+    cls = "bg-rose-100 text-rose-700 border border-rose-200";
+    icon = "x-circle";
+    text = "No Cumple";
+  }
+
+  el.innerHTML = `
+    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold w-max ${cls}">
+      <i data-lucide="${icon}" class="w-3 h-3 mr-1.5"></i>${text}
+    </span>
+  `;
+}
+
+function renderComparisonChart(el, label, series, barColor) {
+  const values = series.map(d => d.value);
+  const max = Math.max(...values) * 1.1;
+
+  // Variación 23-24 (toma el último vs el penúltimo)
+  const a = series[series.length - 2]?.value ?? 0;
+  const b = series[series.length - 1]?.value ?? 0;
+  const pct = a ? ((b - a) / a) * 100 : 0;
+  const pctTxt = `${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`;
+  const pctCls = (b >= a) ? "text-emerald-600" : "text-rose-600";
+
+  const bars = series.map(item => {
+    const h = max ? (item.value / max) * 100 : 0;
+    return `
+      <div class="flex-1 flex flex-col items-center justify-end group h-32">
+        <div class="mb-2 text-xs font-bold text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity">
+          ${item.value}
+        </div>
+        <div class="w-full rounded-t-md transition-all duration-700 ease-out hover:opacity-80 relative ${barColor}"
+             style="height:${h}%"></div>
+        <span class="text-[10px] text-slate-400 font-medium mt-2">${item.year}</span>
+      </div>
+    `;
+  }).join("");
+
+  el.innerHTML = `
+    <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex flex-col h-full min-h-[200px]">
+      <h4 class="text-sm font-bold text-slate-700 mb-4 flex items-center justify-between">
+        ${label}
+        <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+      </h4>
+
+      <div class="flex items-end justify-between space-x-3 flex-1 pb-2">
+        ${bars}
+      </div>
+
+      <div class="mt-2 pt-3 border-t border-slate-50 flex justify-between items-center text-xs">
+        <span class="text-slate-400">Var. 23-24</span>
+        <span class="font-bold ${pctCls}">${pctTxt}</span>
+      </div>
+    </div>
+  `;
+}
+
+function hydrateWidgets() {
+  // Comparison charts
+  document.querySelectorAll(".cmp-chart").forEach(el => {
+    const label = el.dataset.label || "Chart";
+    const color = el.dataset.color || "bg-blue-500";
+    let series = [];
+    try { series = JSON.parse(el.dataset.series || "[]"); } catch(e) {}
+    renderComparisonChart(el, label, series, color);
+  });
+
+  // Traffic lights
+  document.querySelectorAll(".traffic").forEach(el => {
+    const status = el.dataset.status || "Desconocido";
+    renderTrafficLight(el, status);
+  });
+
+  // Re-render lucide icons
+  if (window.lucide) lucide.createIcons();
+}
+
+
+    // init
+    lucide.createIcons();
+    setView();
+  </script>
+</body>
+</html>

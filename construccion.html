@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cargando Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-50 flex items-center justify-center">
+
+
+
+  <div class="text-center space-y-6">
+    <!-- Icono / Identidad -->
+    <div class="mx-auto w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg">
+      <svg class="w-8 h-8 text-white animate-pulse" fill="none" stroke="currentColor" stroke-width="2"
+           viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 3v18h18M7 14l4-4 4 4 6-6" />
+      </svg>
+    </div>
+
+    <!-- Texto principal -->
+    <h1 class="text-2xl font-extrabold text-slate-800">
+      Dashboard en producción
+    </h1>
+
+    <p class="text-slate-500 font-medium">
+      Preparando indicadores y métricas institucionales
+    </p>
+
+    <!-- Barra de carga animada -->
+    <div class="w-64 mx-auto">
+      <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+        <div class="h-full w-1/3 bg-blue-600 rounded-full animate-loading"></div>
+      </div>
+    </div>
+
+    <!-- Estado -->
+    <div class="text-xs font-semibold text-slate-400 tracking-wider uppercase">
+      En proceso de carga…
+    </div>
+  </div>
+
+  <!-- Animación personalizada -->
+  <style>
+    @keyframes loading {
+      0% { transform: translateX(-100%); }
+      50% { transform: translateX(0%); }
+      100% { transform: translateX(100%); }
+    }
+    .animate-loading {
+      animation: loading 1.6s ease-in-out infinite;
+    }
+  </style>
+
+</body>
+</html>

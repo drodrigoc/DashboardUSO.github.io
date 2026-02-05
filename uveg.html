@@ -1,0 +1,1521 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard UV</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Animación simple (porque Tailwind CDN no trae keyframes custom por defecto) */
+    .fade-in-up { animation: fadeInUp .35s ease-out both; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    /* Opcional: ocultar scrollbar (estético) */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+
+<body class="bg-slate-50">
+  <div class="flex h-screen font-sans overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 shadow-lg">
+      <div class="p-8 flex items-center">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center mr-3 flex-shrink-0 shadow-blue-200 shadow-lg">
+          <span class="text-white font-bold text-lg">UV</span>
+        </div>
+        <span class="text-sm font-bold text-slate-800 tracking-tight leading-tight">
+          Unidad de Vinculación<br/>
+          <span class="text-blue-600">con Estudiantes y Graduados</span>
+        </span>
+      </div>
+
+      <div class="flex-1 overflow-y-auto py-4">
+        
+
+        <!-- Sidebar buttons (data-tab = id) -->
+        <nav id="sidebarNav">
+          <button data-tab="Overview" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Visión General</span>
+          </button>
+
+          <button data-tab="Becas" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="graduation-cap" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Becas</span>
+          </button>
+
+          <button data-tab="Bienestar" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="activity" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Bienestar Univ.</span>
+          </button>
+
+          <button data-tab="Social" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="users" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Servicio Social</span>
+          </button>
+
+          <button data-tab="Proyeccion" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="globe" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Proyección Social</span>
+          </button>
+
+          <button data-tab="Deportes" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="trophy" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Deportes</span>
+          </button>
+
+          <button data-tab="Graduados" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="briefcase" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Graduados</span>
+          </button>
+
+          <button data-tab="Admision" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="file-text" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Admisión</span>
+          </button>
+
+          <button data-tab="Datos" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="pie-chart" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Datos Generales</span>
+          </button>
+
+          <button data-tab="Acreditacion" class="sidebar-item flex items-center w-full px-6 py-4 transition-all duration-200 group">
+            <i data-lucide="shield-check" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+            <span class="text-sm tracking-wide text-left">Acreditación</span>
+          </button>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+
+      <!-- Top Header -->
+<header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 z-10 sticky top-0">
+  
+  <div class="flex items-center">
+    <div class="flex items-center md:hidden">
+      <i data-lucide="menu" class="text-slate-500 w-6 h-6 mr-4"></i>
+      <span class="font-bold text-slate-800 text-sm">Unidad de Vinculación</span>
+    </div>
+    </div>
+
+  <div class="flex items-center h-full">
+    <a href="landing.html" class="block">
+      <div class="flex items-center h-16 px-2"> 
+        <img 
+          src="logousocompleto.png" 
+          alt="Logo" 
+          class="h-12 w-auto object-contain"
+        >
+      </div>
+    </a>
+  </div>
+
+</header>
+
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto p-8 scrollbar-hide">
+        <div class="max-w-7xl mx-auto">
+
+          <!-- Section Header -->
+          <div class="flex justify-between items-end mb-8">
+            <div>
+              <h1 id="pageTitle" class="text-3xl font-bold text-slate-800 mb-2">Visión General</h1>
+              <p id="pageSubtitle" class="text-slate-500">Monitoreo de indicadores clave</p>
+            </div>
+            <button class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 flex items-center">
+              <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>
+              Descargar Reporte
+            </button>
+          </div>
+
+          <!-- VIEWS CONTAINER -->
+          <div id="views" class="fade-in-up">
+
+            <!-- =========================
+                 OVERVIEW
+            ========================== -->
+            <section data-view="Overview">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- KPI Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
+                      <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                      <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 4.5%
+                    </div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Becados Activos</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">1,248</div>
+                  <p class="text-slate-500 text-sm font-medium">Total General</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-slate-50 text-slate-600">
+                      <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Antiguo Ingreso</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">2,850</div>
+                  <p class="text-slate-500 text-sm font-medium">Estudiantes regulares</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-purple-50 text-purple-600">
+                      <i data-lucide="user-check" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-rose-100 text-rose-700">
+                      <i data-lucide="arrow-down-right" class="w-3 h-3 mr-1"></i> 2.1%
+                    </div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Nuevo Ingreso</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">450</div>
+                  <p class="text-slate-500 text-sm font-medium">Pre-U + Exonerados + Equiv.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600">
+                      <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                      <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +5%
+                    </div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Acreditación</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">85%</div>
+                  <p class="text-slate-500 text-sm font-medium">Indicadores cumplidos</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                  <h2 class="text-lg font-bold text-slate-800 mb-4">Estado de Indicadores Clave</h2>
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                      <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-4">
+                          <i data-lucide="target" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                          <h4 class="font-bold text-slate-700">Meta Admisión</h4>
+                          <p class="text-xs text-slate-500">Documentación completa</p>
+                        </div>
+                      </div>
+                      <div class="text-right">
+                        <div class="font-bold text-slate-800">92%</div>
+                        <div class="text-xs text-emerald-600 font-bold">Alto</div>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                      <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 mr-4">
+                          <i data-lucide="sprout" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                          <h4 class="font-bold text-slate-700">Proyección Social</h4>
+                          <p class="text-xs text-slate-500">Nexus + USOVerde</p>
+                        </div>
+                      </div>
+                      <div class="text-right">
+                        <div class="font-bold text-slate-800">12 Proyectos</div>
+                        <div class="text-xs text-blue-600 font-bold">Activos</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <h3 class="text-lg font-bold text-slate-800 mb-6">Resumen Distribución</h3>
+                  <div class="flex items-center justify-center py-8">
+                    <div class="relative w-40 h-40 rounded-full border-8 border-slate-100 flex items-center justify-center">
+                      <div class="text-center">
+                        <span class="block text-2xl font-bold text-slate-800">3,300</span>
+                        <span class="text-xs text-slate-500">Total</span>
+                      </div>
+                      <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="46" fill="transparent" stroke="#2563EB" stroke-width="8" stroke-dasharray="80 200" class="opacity-80"></circle>
+                        <circle cx="50" cy="50" r="46" fill="transparent" stroke="#10B981" stroke-width="8" stroke-dasharray="20 200" stroke-dashoffset="-80" class="opacity-80"></circle>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between"><span class="text-slate-500">Antiguo Ingreso</span><span class="font-bold text-blue-600">86%</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Nuevo Ingreso</span><span class="font-bold text-emerald-600">14%</span></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- =========================
+                 BECAS
+            ========================== -->
+            <section data-view="Becas" class="hidden">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-blue-50 text-blue-600"><i data-lucide="graduation-cap" class="w-6 h-6"></i></div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                      <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 12%
+                    </div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Total Becados</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">1,248</div>
+                  <p class="text-slate-500 text-sm font-medium">Ciclo 01-2024</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-indigo-50 text-indigo-600"><i data-lucide="book-open" class="w-6 h-6"></i></div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Programas Activos</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">8</div>
+                  <p class="text-slate-500 text-sm font-medium">Tipos de financiamiento</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-amber-50 text-amber-600"><i data-lucide="user-check" class="w-6 h-6"></i></div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-rose-100 text-rose-700">
+                      <i data-lucide="arrow-down-right" class="w-3 h-3 mr-1"></i> 2%
+                    </div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Becados en Servicio</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">310</div>
+                  <p class="text-slate-500 text-sm font-medium">Horas sociales activas</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <h3 class="font-bold text-slate-800 mb-6">Becados por Carrera/Año</h3>
+
+                  <!-- Progress -->
+                  <div class="mb-4">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span class="font-medium text-slate-700">Ingeniería de Sistemas - Año 1</span>
+                      <span class="font-bold text-slate-800">45</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5">
+                      <div class="h-2.5 rounded-full bg-blue-600" style="width:45%"></div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span class="font-medium text-slate-700">Ingeniería de Sistemas - Año 2</span>
+                      <span class="font-bold text-slate-800">60</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5">
+                      <div class="h-2.5 rounded-full bg-blue-500" style="width:60%"></div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span class="font-medium text-slate-700">Lic. Idiomas - Año 1</span>
+                      <span class="font-bold text-slate-800">35</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5">
+                      <div class="h-2.5 rounded-full bg-indigo-500" style="width:35%"></div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span class="font-medium text-slate-700">Diseño Gráfico - Año 3</span>
+                      <span class="font-bold text-slate-800">25</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5">
+                      <div class="h-2.5 rounded-full bg-indigo-400" style="width:25%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <h3 class="font-bold text-slate-800 mb-6">Tipos de Becas</h3>
+                  <div class="space-y-4">
+                    <div class="p-4 bg-slate-50 rounded-lg flex justify-between items-center">
+                      <span class="font-medium text-slate-700">Excelencia Académica</span>
+                      <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold">450 Becados</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg flex justify-between items-center">
+                      <span class="font-medium text-slate-700">Socioeconómica</span>
+                      <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">520 Becados</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg flex justify-between items-center">
+                      <span class="font-medium text-slate-700">Deportiva</span>
+                      <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold">180 Becados</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- =========================
+                 BIENESTAR
+            ========================== -->
+            <section data-view="Bienestar" class="hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-rose-50 text-rose-600"><i data-lucide="activity" class="w-6 h-6"></i></div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                      <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> 15%
+                    </div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Participación Clubes</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">540</div>
+                  <p class="text-slate-500 text-sm font-medium">Estudiantes activos</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600"><i data-lucide="alert-circle" class="w-6 h-6"></i></div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-rose-100 text-rose-700">
+                      <i data-lucide="arrow-down-right" class="w-3 h-3 mr-1"></i> 0.2%
+                    </div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Deserción Clubes</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">4.1%</div>
+                  <p class="text-slate-500 text-sm font-medium">Promedio general</p>
+                </div>
+              </div>
+
+              <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                <h3 class="font-bold text-slate-800 mb-6">Detalle por Programa (Clubes)</h3>
+                <table class="w-full text-left">
+                  <thead class="text-xs text-slate-500 uppercase bg-slate-50">
+                    <tr>
+                      <th class="p-3 rounded-l-lg">Club / Programa</th>
+                      <th class="p-3">Inscritos</th>
+                      <th class="p-3 rounded-r-lg">Tasa Deserción</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-sm">
+                    <tr>
+                      <td class="p-3 font-medium text-slate-700">Club de Teatro Camaleones</td>
+                      <td class="p-3">45</td>
+                      <td class="p-3 text-red-500 font-bold">5.2%</td>
+                    </tr>
+                    <tr>
+                      <td class="p-3 font-medium text-slate-700">Club de Música</td>
+                      <td class="p-3">120</td>
+                      <td class="p-3 text-slate-500">2.1%</td>
+                    </tr>
+                    <tr>
+                      <td class="p-3 font-medium text-slate-700">Club de Literatura</td>
+                      <td class="p-3">35</td>
+                      <td class="p-3 text-amber-500 font-bold">4.5%</td>
+                    </tr>
+                    <tr>
+                      <td class="p-3 font-medium text-slate-700">Club Gamer</td>
+                      <td class="p-3">180</td>
+                      <td class="p-3 text-slate-500">1.5%</td>
+                    </tr>
+                    <tr>
+                      <td class="p-3 font-medium text-slate-700">Club de Cultura</td>
+                      <td class="p-3">160</td>
+                      <td class="p-3 text-slate-500">3.0%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- =========================
+                 SOCIAL (SSE)
+            ========================== -->
+            <section data-view="Social" class="hidden">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-blue-50 text-blue-600"><i data-lucide="user-check" class="w-6 h-6"></i></div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Aptos para SSE</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">850</div>
+                  <p class="text-slate-500 text-sm font-medium">Cumplen requisitos (60% carrera)</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600"><i data-lucide="target" class="w-6 h-6"></i></div>
+                    <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">90% Efic.</div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Finalizados</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">720</div>
+                  <p class="text-slate-500 text-sm font-medium">Ciclo actual</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600"><i data-lucide="map-pin" class="w-6 h-6"></i></div>
+                  </div>
+                  <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Servicio Ambiental</h3>
+                  <div class="text-3xl font-bold text-slate-800 mb-1">150</div>
+                  <p class="text-slate-500 text-sm font-medium">Proyectos ecológicos</p>
+                </div>
+              </div>
+
+              <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-around">
+                <div class="text-center">
+                  <div class="text-4xl font-bold text-slate-300 mb-2">100%</div>
+                  <div class="text-sm font-bold text-slate-500 uppercase">Inscritos</div>
+                  <div class="text-xs text-slate-400">850 Estudiantes</div>
+                </div>
+                <div class="h-0.5 w-16 bg-slate-200"></div>
+                <div class="text-center">
+                  <div class="text-4xl font-bold text-blue-300 mb-2">95%</div>
+                  <div class="text-sm font-bold text-blue-600 uppercase">En Proceso</div>
+                  <div class="text-xs text-slate-400">807 Estudiantes</div>
+                </div>
+                <div class="h-0.5 w-16 bg-slate-200"></div>
+                <div class="text-center">
+                  <div class="text-4xl font-bold text-emerald-500 mb-2">84%</div>
+                  <div class="text-sm font-bold text-emerald-700 uppercase">Finalizados</div>
+                  <div class="text-xs text-slate-400">720 Estudiantes</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- =========================
+                 PROYECCIÓN (placeholder corto)
+            ========================== -->
+            <section data-view="Proyeccion" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Nexus -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5"><i data-lucide="share-2" class="w-32 h-32"></i></div>
+                    <h2 class="text-xl font-bold text-blue-800 mb-4 flex items-center">
+                        <i data-lucide="share-2" class="w-5 h-5 mr-2"></i>Nexus Universitario
+                    </h2>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="p-3 bg-blue-50 rounded-xl">
+                        <div class="text-2xl font-bold text-blue-700">15</div>
+                        <div class="text-xs text-slate-500 uppercase font-bold">Instituciones Visitadas</div>
+                        </div>
+                        <div class="p-3 bg-blue-50 rounded-xl">
+                        <div class="text-2xl font-bold text-blue-700">3,200</div>
+                        <div class="text-xs text-slate-500 uppercase font-bold">Estudiantes Beneficiados</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h4 class="text-xs font-bold text-slate-500 mb-2">Gastos Promoción vs Año Anterior</h4>
+                        <div class="w-full bg-slate-100 h-2 rounded-full mb-1">
+                        <div class="bg-blue-600 h-2 rounded-full w-[75%]"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-500"><span>2024: $12k</span><span>2023: $10k</span></div>
+                    </div>
+                    </div>
+
+                    <!-- USOVerde -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5"><i data-lucide="sprout" class="w-32 h-32"></i></div>
+                    <h2 class="text-xl font-bold text-emerald-800 mb-4 flex items-center">
+                        <i data-lucide="sprout" class="w-5 h-5 mr-2"></i>USOVerde
+                    </h2>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="p-3 bg-emerald-50 rounded-xl">
+                        <div class="text-2xl font-bold text-emerald-700">8</div>
+                        <div class="text-xs text-slate-500 uppercase font-bold">Comunidades Atendidas</div>
+                        </div>
+                        <div class="p-3 bg-emerald-50 rounded-xl">
+                        <div class="text-2xl font-bold text-emerald-700">1,450</div>
+                        <div class="text-xs text-slate-500 uppercase font-bold">Personas Beneficiadas</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h4 class="text-xs font-bold text-slate-500 mb-2">Inversión del Proyecto</h4>
+                        <div class="w-full bg-slate-100 h-2 rounded-full mb-1">
+                        <div class="bg-emerald-600 h-2 rounded-full w-[60%]"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-500"><span>Ejecutado: $8.5k</span><span>Presupuesto: $14k</span></div>
+                    </div>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-slate-800 mb-4">Comparativo Anual de Impacto</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="cmp-chart" data-label="Instituciones (Nexus)" data-color="bg-blue-500"
+                        data-series='[{"year":"2022","value":10},{"year":"2023","value":12},{"year":"2024","value":15}]'></div>
+
+                    <div class="cmp-chart" data-label="Beneficiarios (Nexus)" data-color="bg-blue-400"
+                        data-series='[{"year":"2022","value":2500},{"year":"2023","value":2800},{"year":"2024","value":3200}]'></div>
+
+                    <div class="cmp-chart" data-label="Comunidades (USOVerde)" data-color="bg-emerald-500"
+                        data-series='[{"year":"2022","value":4},{"year":"2023","value":6},{"year":"2024","value":8}]'></div>
+
+                    <div class="cmp-chart" data-label="Inversión (USOVerde)" data-color="bg-emerald-400"
+                        data-series='[{"year":"2022","value":5000},{"year":"2023","value":6500},{"year":"2024","value":8500}]'></div>
+                </div>
+                </section>
+
+
+            <!-- =========================
+                 DEPORTES (placeholder corto)
+            ========================== -->
+            <section data-view="Deportes" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-purple-50 text-purple-600"><i data-lucide="trophy" class="w-6 h-6"></i></div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Disciplinas</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">12</div>
+                    <p class="text-slate-500 text-sm font-medium">Activas este ciclo</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-amber-50 text-amber-600"><i data-lucide="users" class="w-6 h-6"></i></div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Atletas Selección</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">145</div>
+                    <p class="text-slate-500 text-sm font-medium">Representantes institucionales</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-rose-50 text-rose-600"><i data-lucide="activity" class="w-6 h-6"></i></div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +5%
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Uso Gimnasio</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">68%</div>
+                    <p class="text-slate-500 text-sm font-medium">Promedio mensual</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-blue-50 text-blue-600"><i data-lucide="target" class="w-6 h-6"></i></div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Torneos</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">4</div>
+                    <p class="text-slate-500 text-sm font-medium">Internos y Externos</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6">Top Disciplinas (Por Estudiantes)</h3>
+
+                    <!-- Progress bars -->
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                        <span class="font-medium text-slate-700">Fútbol</span>
+                        <span class="font-bold text-slate-800">120</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-slate-800" style="width:90%"></div></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                        <span class="font-medium text-slate-700">Baloncesto</span>
+                        <span class="font-bold text-slate-800">95</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-orange-500" style="width:75%"></div></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                        <span class="font-medium text-slate-700">Voleibol</span>
+                        <span class="font-bold text-slate-800">80</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-yellow-400" style="width:60%"></div></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                        <span class="font-medium text-slate-700">Ajedrez</span>
+                        <span class="font-bold text-slate-800">45</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-slate-600" style="width:40%"></div></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                        <span class="font-medium text-slate-700">Natación</span>
+                        <span class="font-bold text-slate-800">35</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-blue-400" style="width:30%"></div></div>
+                    </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-center items-center text-center">
+                    <div class="p-6 rounded-full bg-slate-50 mb-4">
+                        <i data-lucide="trophy" class="w-16 h-16 text-yellow-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">Logros Destacados</h3>
+                    <p class="text-slate-500 mb-4">Ciclo 01-2024</p>
+                    <div class="flex gap-2 flex-wrap justify-center">
+                        <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-bold">1er Lugar Fútbol Sala</span>
+                        <span class="px-3 py-1 bg-slate-100 text-slate-800 rounded-full text-xs font-bold">2do Lugar Ajedrez</span>
+                    </div>
+                    </div>
+                </div>
+                </section>
+
+
+            <!-- =========================
+                 GRADUADOS (placeholder corto)
+            ========================== -->
+            <section data-view="Graduados" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-indigo-50 text-indigo-600"><i data-lucide="graduation-cap" class="w-6 h-6"></i></div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +10%
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Graduados</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">450</div>
+                    <p class="text-slate-500 text-sm font-medium">Último ciclo</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-slate-50 text-slate-600"><i data-lucide="users" class="w-6 h-6"></i></div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Egresados</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">510</div>
+                    <p class="text-slate-500 text-sm font-medium">Pendientes de tesis/horas</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600"><i data-lucide="briefcase" class="w-6 h-6"></i></div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">Top Tier</div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Empleabilidad</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">88%</div>
+                    <p class="text-slate-500 text-sm font-medium">Trabajando en su área</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6">Asistencia a Eventos Alumni</h3>
+                    <div class="flex items-end space-x-4 h-48">
+                    <div class="w-1/4 bg-indigo-100 rounded-t-lg relative group h-[40%] hover:h-[45%] transition-all">
+                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-indigo-800">Q1</div>
+                    </div>
+                    <div class="w-1/4 bg-indigo-200 rounded-t-lg relative group h-[60%] hover:h-[65%] transition-all">
+                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-indigo-800">Q2</div>
+                    </div>
+                    <div class="w-1/4 bg-indigo-400 rounded-t-lg relative group h-[50%] hover:h-[55%] transition-all">
+                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white">Q3</div>
+                    </div>
+                    <div class="w-1/4 bg-indigo-600 rounded-t-lg relative group h-[85%] hover:h-[90%] transition-all">
+                        <div class="absolute top-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white mb-2">Evento Anual</div>
+                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white">Q4</div>
+                    </div>
+                    </div>
+                </div>
+                </section>
+
+
+            <!-- =========================
+                 ADMISION (placeholder corto)
+            ========================== -->
+            <section data-view="Admision" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-blue-50 text-blue-600"><i data-lucide="book-open" class="w-6 h-6"></i></div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Preuniversitario</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">850</div>
+                    <p class="text-slate-500 text-sm font-medium">Total Inscritos 2024</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-purple-50 text-purple-600"><i data-lucide="users" class="w-6 h-6"></i></div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +15
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Reingresos</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">120</div>
+                    <p class="text-slate-500 text-sm font-medium">Estudiantes retornando</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-amber-50 text-amber-600"><i data-lucide="clock" class="w-6 h-6"></i></div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        <i data-lucide="arrow-down-right" class="w-3 h-3 mr-1"></i> -12h (Mejora)
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Tiempo Respuesta</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">48h</div>
+                    <p class="text-slate-500 text-sm font-medium">Proceso de admisión</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-rose-50 text-rose-600"><i data-lucide="alert-circle" class="w-6 h-6"></i></div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        <i data-lucide="arrow-down-right" class="w-3 h-3 mr-1"></i> -1.1%
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Deserción Ingreso</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">5.2%</div>
+                    <p class="text-slate-500 text-sm font-medium">Reprobados/Retirados</p>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                    Comparativo Histórico de Ingresos (2022-2024)
+                    <span class="ml-3 text-xs font-normal text-slate-500 bg-slate-100 px-2 py-1 rounded-full">Análisis Anual</span>
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+                    <div class="cmp-chart" data-label="Total Nuevo Ingreso" data-color="bg-slate-700"
+                        data-series='[{"year":"2022","value":845},{"year":"2023","value":932},{"year":"2024","value":1015}]'></div>
+
+                    <div class="cmp-chart" data-label="Preuniversitario" data-color="bg-blue-500"
+                        data-series='[{"year":"2022","value":720},{"year":"2023","value":780},{"year":"2024","value":850}]'></div>
+
+                    <div class="cmp-chart" data-label="Exoneraciones" data-color="bg-emerald-500"
+                        data-series='[{"year":"2022","value":90},{"year":"2023","value":110},{"year":"2024","value":120}]'></div>
+
+                    <div class="cmp-chart" data-label="Equivalencias" data-color="bg-purple-500"
+                        data-series='[{"year":"2022","value":35},{"year":"2023","value":42},{"year":"2024","value":45}]'></div>
+
+                    <div class="cmp-chart" data-label="Reingresos" data-color="bg-amber-500"
+                        data-series='[{"year":"2022","value":95},{"year":"2023","value":105},{"year":"2024","value":120}]'></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 overflow-hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-slate-800">Gestión Académica por Carrera (2024)</h3>
+                        <button class="text-xs text-blue-600 font-semibold hover:underline">Ver reporte completo</button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold">
+                            <th class="p-3 pl-4 rounded-l-lg">Carrera</th>
+                            <th class="p-3 text-center">Pre-U</th>
+                            <th class="p-3 text-center">Exonerados</th>
+                            <th class="p-3 text-center">Equivalencias</th>
+                            <th class="p-3 text-center rounded-r-lg">Reingresos</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50 text-sm">
+                            <tr class="hover:bg-slate-50/50">
+                            <td class="p-3 pl-4 font-medium text-slate-700">Ingeniería de Sistemas</td>
+                            <td class="p-3 text-center font-bold text-blue-600">320</td>
+                            <td class="p-3 text-center">45</td>
+                            <td class="p-3 text-center">12</td>
+                            <td class="p-3 text-center text-slate-500">25</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                            <td class="p-3 pl-4 font-medium text-slate-700">Licenciatura en Idiomas</td>
+                            <td class="p-3 text-center font-bold text-blue-600">240</td>
+                            <td class="p-3 text-center">30</td>
+                            <td class="p-3 text-center">8</td>
+                            <td class="p-3 text-center text-slate-500">18</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex-1">
+                    <h3 class="font-bold text-slate-800 mb-4 flex items-center">
+                        <i data-lucide="alert-circle" class="w-4 h-4 text-rose-500 mr-2"></i>
+                        Vulnerabilidad Detectada
+                    </h3>
+
+                    <div class="space-y-3">
+                        <div class="p-3 bg-rose-50 rounded-lg border border-rose-100">
+                        <div class="text-xs text-rose-800 font-bold uppercase mb-1">Riesgo Económico</div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Ing. Sistemas</span>
+                            <span class="font-bold text-rose-600">15 casos</span>
+                        </div>
+                        </div>
+
+                        <div class="p-3 bg-amber-50 rounded-lg border border-amber-100">
+                        <div class="text-xs text-amber-800 font-bold uppercase mb-1">Riesgo Geográfico</div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Lic. Idiomas</span>
+                            <span class="font-bold text-amber-600">8 casos</span>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Instituciones -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6 flex items-center">
+                        <i data-lucide="home" class="w-4 h-4 mr-2 text-slate-400"></i>
+                        Instituciones de Procedencia
+                    </h3>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                        <h4 class="text-xs font-bold text-slate-500 uppercase mb-3 tracking-wide">Por Sector</h4>
+
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium text-slate-700">Institutos Públicos</span>
+                            <span class="font-bold text-slate-800">55%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-blue-600" style="width:55%"></div></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium text-slate-700">Colegios Privados</span>
+                            <span class="font-bold text-slate-800">35%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-indigo-500" style="width:35%"></div></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium text-slate-700">Extranjeros/Otros</span>
+                            <span class="font-bold text-slate-800">10%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-slate-400" style="width:10%"></div></div>
+                        </div>
+                        </div>
+
+                        <div>
+                        <h4 class="text-xs font-bold text-slate-500 uppercase mb-3 tracking-wide">Top 5 Instituciones</h4>
+                        <ul class="space-y-3">
+                            <li class="flex justify-between items-center text-sm p-2 hover:bg-slate-50 rounded-lg transition-colors cursor-default">
+                            <span class="text-slate-600 truncate mr-2">Inst. Nacional Central</span>
+                            <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded text-xs">145</span>
+                            </li>
+                            <li class="flex justify-between items-center text-sm p-2 hover:bg-slate-50 rounded-lg transition-colors cursor-default">
+                            <span class="text-slate-600 truncate mr-2">Col. Sagrado Corazón</span>
+                            <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded text-xs">82</span>
+                            </li>
+                            <li class="flex justify-between items-center text-sm p-2 hover:bg-slate-50 rounded-lg transition-colors cursor-default">
+                            <span class="text-slate-600 truncate mr-2">Comp. Edu. San Francisco</span>
+                            <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded text-xs">64</span>
+                            </li>
+                            <li class="flex justify-between items-center text-sm p-2 hover:bg-slate-50 rounded-lg transition-colors cursor-default">
+                            <span class="text-slate-600 truncate mr-2">Liceo Salvadoreño</span>
+                            <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded text-xs">38</span>
+                            </li>
+                        </ul>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Canales -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6 flex items-center">
+                        <i data-lucide="megaphone" class="w-4 h-4 mr-2 text-slate-400"></i>
+                        Canales de Captación
+                    </h3>
+
+                    <div class="space-y-5">
+                        <!-- Redes -->
+                        <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i data-lucide="share-2" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium text-slate-700">Redes Sociales</span>
+                            <span class="font-bold text-slate-800">45%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2 rounded-full"><div class="bg-blue-600 h-2 rounded-full w-[45%]"></div></div>
+                            <p class="text-xs text-slate-400 mt-1">Facebook, Instagram, TikTok</p>
+                        </div>
+                        </div>
+
+                        <!-- Visitas -->
+                        <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i data-lucide="building" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium text-slate-700">Visitas a Colegios</span>
+                            <span class="font-bold text-slate-800">25%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2 rounded-full"><div class="bg-purple-600 h-2 rounded-full w-[25%]"></div></div>
+                            <p class="text-xs text-slate-400 mt-1">Ferias vocacionales y charlas</p>
+                        </div>
+                        </div>
+
+                        <!-- Referencia -->
+                        <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium text-slate-700">Referencia (Boca a boca)</span>
+                            <span class="font-bold text-slate-800">20%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2 rounded-full"><div class="bg-emerald-600 h-2 rounded-full w-[20%]"></div></div>
+                            <p class="text-xs text-slate-400 mt-1">Amigos, familiares, exalumnos</p>
+                        </div>
+                        </div>
+
+                        <!-- Web -->
+                        <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium text-slate-700">Sitio Web / Buscadores</span>
+                            <span class="font-bold text-slate-800">10%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2 rounded-full"><div class="bg-amber-500 h-2 rounded-full w-[10%]"></div></div>
+                            <p class="text-xs text-slate-400 mt-1">Google Search, Página Institucional</p>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Residencia -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6 flex items-center">
+                        <i data-lucide="map-pin" class="w-4 h-4 mr-2 text-slate-400"></i>
+                        Lugar de Residencia
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></div>
+                            <span class="text-sm text-slate-600">Zona Urbana (Local)</span>
+                        </div>
+                        <span class="text-sm font-bold text-slate-800">65%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+                            <span class="text-sm text-slate-600">Zona Rural (Aledaña)</span>
+                        </div>
+                        <span class="text-sm font-bold text-slate-800">25%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 rounded-full bg-purple-500 mr-2"></div>
+                            <span class="text-sm text-slate-600">Otros Departamentos</span>
+                        </div>
+                        <span class="text-sm font-bold text-slate-800">10%</span>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Laboral -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6 flex items-center">
+                        <i data-lucide="briefcase" class="w-4 h-4 mr-2 text-slate-400"></i>
+                        Condición Laboral
+                    </h3>
+
+                    <div class="flex items-center justify-center py-4 relative">
+                        <div class="w-32 h-32 rounded-full border-[12px] border-slate-100 relative">
+                        <div class="absolute top-0 left-0 w-full h-full rounded-full border-[12px] border-blue-600 border-l-transparent border-b-transparent rotate-45"></div>
+                        <div class="absolute inset-0 flex items-center justify-center flex-col">
+                            <span class="text-2xl font-bold text-slate-800">35%</span>
+                            <span class="text-xs text-slate-400">Trabajan</span>
+                        </div>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-center text-slate-500 mt-2">Mayor incidencia laboral en Admón. Empresas</p>
+                    </div>
+                </div>
+                </section>
+
+
+            <!-- =========================
+                 DATOS (placeholder corto)
+            ========================== -->
+            <section data-view="Datos" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600"><i data-lucide="activity" class="w-6 h-6"></i></div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +5
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">NPS Global</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">72</div>
+                    <p class="text-slate-500 text-sm font-medium">Zona de Excelencia</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-rose-50 text-rose-600"><i data-lucide="alert-circle" class="w-6 h-6"></i></div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Estudiantes en Riesgo</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">156</div>
+                    <p class="text-slate-500 text-sm font-medium">Seguimiento activo</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-amber-50 text-amber-600"><i data-lucide="file-text" class="w-6 h-6"></i></div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Mallas Irregulares</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">12%</div>
+                    <p class="text-slate-500 text-sm font-medium">Del total inscritos</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6">Satisfacción por Segmento (NPS)</h3>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                        <div class="text-2xl font-bold text-blue-600">82</div>
+                        <div class="text-xs text-slate-500 uppercase font-bold mt-1">Nuevo Ingreso</div>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                        <div class="text-2xl font-bold text-purple-600">78</div>
+                        <div class="text-xs text-slate-500 uppercase font-bold mt-1">Activos</div>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                        <div class="text-2xl font-bold text-emerald-600">65</div>
+                        <div class="text-xs text-slate-500 uppercase font-bold mt-1">Graduados</div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6">Seguimiento de Deserción</h3>
+                    <div class="flex items-center justify-around py-4">
+                        <div class="text-center">
+                        <div class="p-4 bg-emerald-50 rounded-full mb-2 inline-block">
+                            <i data-lucide="user-check" class="w-8 h-8 text-emerald-600"></i>
+                        </div>
+                        <div class="text-2xl font-bold text-slate-800">45%</div>
+                        <div class="text-xs text-slate-500 max-w-[100px] mx-auto">Con Seguimiento Académico</div>
+                        </div>
+
+                        <div class="h-16 w-px bg-slate-200"></div>
+
+                        <div class="text-center">
+                        <div class="p-4 bg-rose-50 rounded-full mb-2 inline-block">
+                            <i data-lucide="x-circle" class="w-8 h-8 text-rose-600"></i>
+                        </div>
+                        <div class="text-2xl font-bold text-slate-800">55%</div>
+                        <div class="text-xs text-slate-500 max-w-[100px] mx-auto">Sin Seguimiento (Abandono)</div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-slate-800 mb-4 flex items-center">
+                    <i data-lucide="handshake" class="w-5 h-5 mr-2 text-slate-500"></i>
+                    Pasantías y Mentorías
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="grid grid-cols-2 gap-4">
+                    <!-- Pasantes -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-blue-50 text-blue-600"><i data-lucide="briefcase" class="w-6 h-6"></i></div>
+                        </div>
+                        <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Pasantes Activos</h3>
+                        <div class="text-3xl font-bold text-slate-800 mb-1">120</div>
+                        <p class="text-slate-500 text-sm font-medium">En empresas aliadas</p>
+                    </div>
+
+                    <!-- Mentores -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-purple-50 text-purple-600"><i data-lucide="lightbulb" class="w-6 h-6"></i></div>
+                        </div>
+                        <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Mentores Activos</h3>
+                        <div class="text-3xl font-bold text-slate-800 mb-1">45</div>
+                        <p class="text-slate-500 text-sm font-medium">Profesionales guía</p>
+                    </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase mb-3 tracking-wide">Empresas y Lugares Aliados</h4>
+                    <div class="space-y-3 max-h-48 overflow-y-auto pr-2">
+                        <div class="flex items-center justify-between p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs mr-3">MS</div>
+                            <span class="text-sm font-medium text-slate-700">Microsoft El Salvador</span>
+                        </div>
+                        <span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full font-bold">12 Pasantes</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-xs mr-3">BA</div>
+                            <span class="text-sm font-medium text-slate-700">Banco Agrícola</span>
+                        </div>
+                        <span class="text-xs bg-emerald-50 text-emerald-600 px-2 py-1 rounded-full font-bold">8 Pasantes</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs mr-3">TI</div>
+                            <span class="text-sm font-medium text-slate-700">Tigo (Millicom)</span>
+                        </div>
+                        <span class="text-xs bg-indigo-50 text-indigo-600 px-2 py-1 rounded-full font-bold">15 Pasantes</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-xs mr-3">AS</div>
+                            <span class="text-sm font-medium text-slate-700">ASI (Asoc. Industriales)</span>
+                        </div>
+                        <span class="text-xs bg-amber-50 text-amber-600 px-2 py-1 rounded-full font-bold">5 Pasantes</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 font-bold text-xs mr-3">SM</div>
+                            <span class="text-sm font-medium text-slate-700">Siman Corporativo</span>
+                        </div>
+                        <span class="text-xs bg-rose-50 text-rose-600 px-2 py-1 rounded-full font-bold">10 Pasantes</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-4">Inscritos por Ciclo (Nuevo vs Antiguo)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="cmp-chart" data-label="Nuevo Ingreso (Pre-U, Equiv, Exon)" data-color="bg-purple-500"
+                        data-series='[{"year":"2022","value":380},{"year":"2023","value":420},{"year":"2024","value":450}]'></div>
+
+                    <div class="cmp-chart" data-label="Antiguo Ingreso" data-color="bg-slate-500"
+                        data-series='[{"year":"2022","value":2500},{"year":"2023","value":2650},{"year":"2024","value":2850}]'></div>
+                    </div>
+                </div>
+                </section>
+
+
+            <!-- =========================
+                 ACREDITACION (placeholder corto)
+            ========================== -->
+            <section data-view="Acreditacion" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Indicadores Totales -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-indigo-50 text-indigo-600">
+                        <i data-lucide="target" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Indicadores Totales</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">45</div>
+                    <p class="text-slate-500 text-sm font-medium">Monitoreados</p>
+                    </div>
+
+                    <!-- Cumplimiento -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600">
+                        <i data-lucide="check-circle" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +2%
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Cumplimiento</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">85%</div>
+                    <p class="text-slate-500 text-sm font-medium">Global</p>
+                    </div>
+
+                    <!-- Alertas -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl bg-rose-50 text-rose-600">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Alertas</h3>
+                    <div class="text-3xl font-bold text-slate-800 mb-1">3</div>
+                    <p class="text-slate-500 text-sm font-medium">No cumplen criterio</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100">
+                    <h3 class="font-bold text-slate-800">Matriz de Acreditación</h3>
+                    <p class="text-sm text-slate-500">Vinculación de Proyectos, Productos y Convenios</p>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-50 text-slate-500 text-xs uppercase font-semibold">
+                        <tr>
+                            <th class="p-4">Dimensión / Criterio</th>
+                            <th class="p-4">Indicador</th>
+                            <th class="p-4">Asociación (Proyecto/Prod/Conv)</th>
+                            <th class="p-4 text-center">Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="p-4 font-medium text-slate-700">
+                            <div class="text-xs text-slate-500 mb-1">Dimensión 4: Proyección</div>
+                            Criterio 4.1: Vinculación Social
+                            </td>
+                            <td class="p-4 text-slate-600">Impacto en comunidades vulnerables</td>
+                            <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="sprout" class="w-4 h-4 text-emerald-600"></i>
+                                <span>Pry: USOVerde Fase 2</span>
+                            </div>
+                            </td>
+                            <td class="p-4 text-center">
+                            <span class="traffic" data-status="Cumple"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="p-4 font-medium text-slate-700">
+                            <div class="text-xs text-slate-500 mb-1">Dimensión 2: Investigación</div>
+                            Criterio 2.3: Publicaciones
+                            </td>
+                            <td class="p-4 text-slate-600">Papers publicados por año</td>
+                            <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i>
+                                <span>Prod: Artículo IEEE Nexus</span>
+                            </div>
+                            </td>
+                            <td class="p-4 text-center">
+                            <span class="traffic" data-status="En proceso"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="p-4 font-medium text-slate-700">
+                            <div class="text-xs text-slate-500 mb-1">Dimensión 1: Docencia</div>
+                            Criterio 1.5: Convenios Activos
+                            </td>
+                            <td class="p-4 text-slate-600">Movilidad estudiantil</td>
+                            <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="globe" class="w-4 h-4 text-indigo-600"></i>
+                                <span>Conv: Erasmus+ 2024</span>
+                            </div>
+                            </td>
+                            <td class="p-4 text-center">
+                            <span class="traffic" data-status="No cumple"></span>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </section>
+
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Lucide icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    // ====== Estado ======
+    let activeTab = "Overview";
+
+    const titles = {
+      Overview: "Visión General",
+      Becas: "Programa de Becas",
+      Bienestar: "Bienestar Universitario",
+      Social: "Servicio Social Estudiantil",
+      Proyeccion: "Proyectos de Proyección Social",
+      Deportes: "Deportes",
+      Graduados: "Graduados y Egresados",
+      Admision: "Procesos de Admisión",
+      Datos: "Datos Generales Estudiante",
+      Acreditacion: "Sistema de Acreditación",
+    };
+
+    // ====== Helpers ======
+    function setSidebarStyles() {
+      document.querySelectorAll(".sidebar-item").forEach(btn => {
+        const isActive = btn.dataset.tab === activeTab;
+        btn.classList.toggle("bg-blue-50", isActive);
+        btn.classList.toggle("border-r-4", isActive);
+        btn.classList.toggle("border-blue-600", isActive);
+        btn.classList.toggle("text-blue-900", isActive);
+        btn.classList.toggle("font-semibold", isActive);
+
+        if (!isActive) {
+          btn.classList.add("text-slate-500");
+          btn.classList.remove("text-blue-900", "font-semibold", "bg-blue-50", "border-r-4", "border-blue-600");
+          btn.classList.add("hover:bg-slate-50", "hover:text-blue-700");
+        }
+
+        // ícono
+        const icon = btn.querySelector("svg, i[data-lucide]");
+        if (icon) {
+          icon.classList.toggle("text-blue-600", isActive);
+          icon.classList.toggle("text-slate-400", !isActive);
+          icon.classList.add("group-hover:text-blue-500");
+        }
+      });
+    }
+
+    function setView() {
+      // title
+      document.getElementById("pageTitle").textContent = titles[activeTab] || "Dashboard";
+
+      // views
+      document.querySelectorAll("[data-view]").forEach(sec => {
+        sec.classList.toggle("hidden", sec.dataset.view !== activeTab);
+      });
+
+      // re-trigger animation
+      const views = document.getElementById("views");
+      views.classList.remove("fade-in-up");
+      void views.offsetWidth; // reflow
+      views.classList.add("fade-in-up");
+
+      setSidebarStyles();
+
+      // re-render lucide icons after DOM updates
+      if (window.lucide) lucide.createIcons();
+      hydrateWidgets();
+
+    }
+
+    // ====== Events ======
+    document.getElementById("sidebarNav").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-tab]");
+      if (!btn) return;
+      activeTab = btn.dataset.tab;
+      setView();
+    });
+    function renderTrafficLight(el, status) {
+  let cls = "bg-slate-100 text-slate-500";
+  let icon = "alert-circle";
+  let text = "Desconocido";
+
+  if (status === "Cumple") {
+    cls = "bg-emerald-100 text-emerald-700 border border-emerald-200";
+    icon = "check-circle";
+    text = "Cumple";
+  } else if (status === "En proceso") {
+    cls = "bg-amber-100 text-amber-700 border border-amber-200";
+    icon = "alert-triangle";
+    text = "En Proceso";
+  } else if (status === "No cumple") {
+    cls = "bg-rose-100 text-rose-700 border border-rose-200";
+    icon = "x-circle";
+    text = "No Cumple";
+  }
+
+  el.innerHTML = `
+    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold w-max ${cls}">
+      <i data-lucide="${icon}" class="w-3 h-3 mr-1.5"></i>${text}
+    </span>
+  `;
+}
+
+function renderComparisonChart(el, label, series, barColor) {
+  const values = series.map(d => d.value);
+  const max = Math.max(...values) * 1.1;
+
+  // Variación 23-24 (toma el último vs el penúltimo)
+  const a = series[series.length - 2]?.value ?? 0;
+  const b = series[series.length - 1]?.value ?? 0;
+  const pct = a ? ((b - a) / a) * 100 : 0;
+  const pctTxt = `${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`;
+  const pctCls = (b >= a) ? "text-emerald-600" : "text-rose-600";
+
+  const bars = series.map(item => {
+    const h = max ? (item.value / max) * 100 : 0;
+    return `
+      <div class="flex-1 flex flex-col items-center justify-end group h-32">
+        <div class="mb-2 text-xs font-bold text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity">
+          ${item.value}
+        </div>
+        <div class="w-full rounded-t-md transition-all duration-700 ease-out hover:opacity-80 relative ${barColor}"
+             style="height:${h}%"></div>
+        <span class="text-[10px] text-slate-400 font-medium mt-2">${item.year}</span>
+      </div>
+    `;
+  }).join("");
+
+  el.innerHTML = `
+    <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex flex-col h-full min-h-[200px]">
+      <h4 class="text-sm font-bold text-slate-700 mb-4 flex items-center justify-between">
+        ${label}
+        <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+      </h4>
+
+      <div class="flex items-end justify-between space-x-3 flex-1 pb-2">
+        ${bars}
+      </div>
+
+      <div class="mt-2 pt-3 border-t border-slate-50 flex justify-between items-center text-xs">
+        <span class="text-slate-400">Var. 23-24</span>
+        <span class="font-bold ${pctCls}">${pctTxt}</span>
+      </div>
+    </div>
+  `;
+}
+
+function hydrateWidgets() {
+  // Comparison charts
+  document.querySelectorAll(".cmp-chart").forEach(el => {
+    const label = el.dataset.label || "Chart";
+    const color = el.dataset.color || "bg-blue-500";
+    let series = [];
+    try { series = JSON.parse(el.dataset.series || "[]"); } catch(e) {}
+    renderComparisonChart(el, label, series, color);
+  });
+
+  // Traffic lights
+  document.querySelectorAll(".traffic").forEach(el => {
+    const status = el.dataset.status || "Desconocido";
+    renderTrafficLight(el, status);
+  });
+
+  // Re-render lucide icons
+  if (window.lucide) lucide.createIcons();
+}
+
+
+    // init
+    lucide.createIcons();
+    setView();
+  </script>
+</body>
+</html>
